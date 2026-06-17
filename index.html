@@ -1,44 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Security Portfolio</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daniel Mzae | Cybersecurity Portfolio</title>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
-
 <body>
 
-<pre class="terminal">
+<header>
+    <h1>Daniel Mzae</h1>
+    <p>Cybersecurity Analyst | Cloud Security | SOC Operations</p>
+</header>
 
-$ whoami
-Cybersecurity Analyst | SOC | Cloud Security Engineer
+<nav>
+    <a href="index.html">Home</a>
+    <a href="cloud/index.html">Cloud</a>
+    <a href="soc/index.html">SOC</a>
+    <a href="projects/index.html">Projects</a>
+    <a href="resume/index.html">Resume</a>
+</nav>
 
-$ skills
-Azure, IAM, SIEM (Sentinel), Threat Hunting, Incident Response
+<div class="container">
 
-$ focus
-Cloud Security / SOC Operations / Defensive Security
+<section>
+    <h2>About Me</h2>
+    <p>
+        Cybersecurity professional focused on cloud security,
+        identity and access management, threat detection,
+        incident response and security operations.
+    </p>
+</section>
 
-$ projects
-- Azure Firewall Lab
-- Active Directory Attack Simulation
-- SIEM Log Analysis (Sentinel)
+<section>
+    <h2>Core Skills</h2>
 
-$ navigation
-Cloud:     ./cloud/
-SOC:       ./soc/
-Projects:  ./projects/
-Resume:    ./resume/
+    <div class="skills">
+        <span class="skill">Microsoft Sentinel</span>
+        <span class="skill">Azure Security</span>
+        <span class="skill">IAM & RBAC</span>
+        <span class="skill">Threat Hunting</span>
+        <span class="skill">Incident Response</span>
+        <span class="skill">Linux</span>
+        <span class="skill">Python</span>
+    </div>
+</section>
 
-$ contact
-Email: mzae@example.com
-GitHub: https://github.com/mzae
+<section>
+    <h2>Portfolio Areas</h2>
 
-$ status
-Portfolio: ACTIVE
-Learning: Continuous Security Improvement
+    <div class="card-grid">
 
-</pre>
+        <div class="card">
+            <h3>Cloud Security</h3>
+            <p>
+                Azure security engineering, IAM, network security
+                and cloud architecture projects.
+            </p>
+            <p>
+                <a href="cloud/index.html">View Cloud Portfolio</a>
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>SOC Operations</h3>
+            <p>
+                Security monitoring, threat hunting,
+                incident response and SIEM investigations.
+            </p>
+            <p>
+                <a href="soc/index.html">View SOC Portfolio</a>
+            </p>
+        </div>
+
+    </div>
+</section>
+
+<section>
+    <h2>Featured Projects</h2>
+
+    <div class="card-grid">
+
+        <div class="card">
+            <h3>Azure Firewall Configuration</h3>
+            <p>Cloud network security implementation.</p>
+        </div>
+
+        <div class="card">
+            <h3>Microsoft Sentinel Investigation</h3>
+            <p>SIEM monitoring and threat detection.</p>
+        </div>
+
+    </div>
+</section>
+
+</div>
+
+<footer>
+    Daniel Mzae Cybersecurity Portfolio
+</footer>
 
 </body>
 </html>
