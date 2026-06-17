@@ -1,0 +1,22 @@
+body {
+  margin: 0;
+  background: #0b0f14;
+  color: #00ff9c;
+  font-family: "Courier New", monospace;
+  padding: 40px;
+}
+
+.terminal {
+  white-space: pre-wrap;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+a {
+  color: #00ff9c;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
