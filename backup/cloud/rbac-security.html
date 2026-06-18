@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Azure RBAC Security Project</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<nav>
+<a href="../index.html">Home</a>
+<a href="index.html">Cloud</a>
+</nav>
+
+<div class="container">
+
+<h1>Implementing Least-Privilege Access Control in Azure Using RBAC</h1>
+
+<h2>Overview</h2>
+
+<p>
+This project demonstrates the implementation of Role-Based Access
+Control (RBAC) in Microsoft Azure to enforce least-privilege access
+and strengthen cloud governance.
+</p>
+
+<h2>Business Problem</h2>
+
+<p>
+Organizations frequently grant excessive permissions to users,
+creating unnecessary security risk and increasing the attack surface.
+A structured access model was required to ensure users only received
+permissions necessary for their roles.
+</p>
+
+<h2>Objectives</h2>
+
+<ul>
+<li>Create role-specific security groups</li>
+<li>Assign appropriate Azure RBAC roles</li>
+<li>Validate access restrictions</li>
+<li>Review governance and audit controls</li>
+</ul>
+
+<h2>Architecture</h2>
+
+<p>
+Azure Entra ID Groups → Azure RBAC Roles → Resource Group → Virtual Machines
+</p>
+
+<h2>Implementation</h2>
+
+<ol>
+<li>Created Senior Admins, Junior Admins, and Service Desk groups</li>
+<li>Assigned Virtual Machine Contributor permissions</li>
+<li>Validated VM access capabilities</li>
+<li>Tested restricted administrative actions</li>
+<li>Reviewed audit logs and governance controls</li>
+</ol>
+
+<h2>Security Outcome</h2>
+
+<ul>
+<li>Least-privilege access enforced</li>
+<li>Unauthorized actions prevented</li>
+<li>Administrative activities auditable</li>
+<li>Improved governance posture</li>
+</ul>
+
+<h2>Key Skills Demonstrated</h2>
+
+<ul>
+<li>Azure RBAC</li>
+<li>Identity & Access Management</li>
+<li>Zero Trust Principles</li>
+<li>Cloud Governance</li>
+<li>Security Auditing</li>
+</ul>
+
+<h2>Lessons Learned</h2>
+
+<p>
+RBAC is a foundational cloud security control that enables secure
+delegation of responsibilities while reducing operational risk.
+</p>
+
+</div>
+
+</body>
+</html>
