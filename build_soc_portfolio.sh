@@ -1,26 +1,35 @@
+#!/usr/bin/env bash
+
+set -e
+
+echo "[+] Building SOC Portfolio"
+
+for file in sentinel-lab incident-response threat-hunting malware-analysis
+do
+cat > soc/${file}.html <<EOF
 
 <!DOCTYPE html>
 
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>sentinel-lab</title>
+<title>${file}</title>
 <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
 
 <nav>
-    <a href="../index.html">Home</a>
-    <a href="../cloud/index.html">Cloud Security</a>
-    <a href="../soc/index.html">SOC Analyst</a>
-    <a href="../aiml/index.html">AI/ML Security</a>
-    <a href="../projects/index.html">Projects</a>
-    <a href="../resume/index.html">Resume</a>
+<a href="../index.html">Home</a>
+<a href="../cloud/index.html">Cloud</a>
+<a href="../soc/index.html">SOC</a>
+<a href="../aiml/index.html">AI Security</a>
+<a href="../projects/index.html">Projects</a>
+<a href="../resume/index.html">Resume</a>
 </nav>
 
 <div class="container">
 
-<h1>sentinel-lab</h1>
+<h1>${file}</h1>
 
 <h2>Overview</h2>
 <p>
@@ -64,3 +73,7 @@ Document key takeaways.
 
 </body>
 </html>
+EOF
+done
+
+echo "[+] SOC pages created"
