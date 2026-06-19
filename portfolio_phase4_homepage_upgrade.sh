@@ -1,3 +1,29 @@
+#!/bin/bash
+
+set -e
+
+echo "========================================"
+echo " Homepage AI/ML Portfolio Upgrade"
+echo "========================================"
+
+mkdir -p backup
+
+echo "[+] Backing up homepage..."
+cp index.html backup/index.html.bak.$(date +%s)
+
+echo "[+] Checking AI/ML directory..."
+
+mkdir -p aiml
+
+touch aiml/index.html
+touch aiml/prompt-injection.html
+touch aiml/llm-security.html
+touch aiml/rag-security.html
+touch aiml/ai-red-team.html
+
+echo "[+] Rebuilding homepage..."
+
+cat > index.html << 'EOF'
 
 <!DOCTYPE html>
 
@@ -164,3 +190,28 @@
 
 </body>
 </html>
+EOF
+
+echo ""
+echo "========================================"
+echo " Homepage Upgrade Complete"
+echo "========================================"
+
+echo ""
+echo "Portfolio Tracks:"
+echo "  Cloud Security"
+echo "  SOC Analyst"
+echo "  AI/ML Security"
+echo ""
+
+echo "Screenshot folders:"
+echo "  assets/images/cloud-security/"
+echo "  assets/images/soc-analyst/"
+echo "  assets/images/ai-ml-security/"
+echo "  assets/images/profile/"
+echo ""
+
+echo "Next:"
+echo "  git add ."
+echo "  git commit -m 'Add AI security portfolio'"
+echo "  git push"
