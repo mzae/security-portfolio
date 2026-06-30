@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Forensics Challenge - AI/ML Security Portfolio</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">AI/ML Security</div>
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../soc/index.html">SOC</a></li>
+                <li><a href="../cloud/index.html">Cloud</a></li>
+                <li><a href="index.html" class="active">AI/ML Security</a></li>
+                <li><a href="../resume/index.html">Resume</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="project-header">
+            <h1>AI-Powered Digital Forensics Challenge</h1>
+            <p class="subtitle">TryHackMe AI Forensics - Investigating a Data Breach with Machine Learning</p>
+        </div>
+
+        <div class="project-content">
+            <section class="project-overview">
+                <h2>Project Overview</h2>
+                <p>In this project, I tackled the "AI Forensics" challenge on TryHackMe to simulate a real-world incident response scenario. My objective was to investigate a potential data breach at a fictional company, "RobbCo," by leveraging AI-enhanced tools to analyze system logs and identify suspicious file anomalies. This project highlights my ability to integrate Machine Learning into a Digital Forensics and Incident Response (DFIR) workflow.</p>
+                
+                <h3>Key Skills Demonstrated:</h3>
+                <ul class="skills-list">
+                    <li>Digital Forensics and Incident Response (DFIR)</li>
+                    <li>Log Analysis (Linux <code>auth.log</code>)</li>
+                    <li>Anomaly Detection with Scikit-learn</li>
+                    <li>Bash Command Line Proficiency</li>
+                    <li>Threat Hunting</li>
+                    <li>Security Report Writing</li>
+                </ul>
+            </section>
+
+            <section class="investigation-steps">
+                <h2>Investigation Process</h2>
+                
+                <div class="step">
+                    <h3>Step 1: Environment Setup</h3>
+                    <p>I started by isolating my analysis to ensure the integrity of the evidence. I activated the dedicated forensic virtual environment on the target machine.</p>
+                    <pre><code>source /opt/dfir-env/bin/activate</code></pre>
+                    <div class="image-container">
+                        <img src="images/step1_env_setup.png" alt="Environment Setup">
+                        <p class="image-caption">Figure 1: Activating the DFIR environment and listing available tools</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>Step 2: AI-Powered Log Analysis</h3>
+                    <p>To quickly understand what happened, I utilized the <code>classify_logs.py</code> script. This tool uses a Scikit-learn model trained on <code>auth.log</code> data to distinguish between normal activity and suspicious login attempts.</p>
+                    <pre><code>python3 /opt/dfir-lab/classify_logs.py /var/log/auth.log</code></pre>
+                    <div class="image-container">
+                        <img src="images/step2_log_analysis.png" alt="Log Analysis">
+                        <p class="image-caption">Figure 2: AI classification of auth.log showing suspicious login attempts</p>
+                    </div>
+                    <div class="finding-box">
+                        <strong>Key Finding:</strong> The attacker successfully logged in as <code>j.morgan</code> at <code>03:01:02</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>Step 3: Identifying Initial Access Vector</h3>
+                    <p>To determine how the attacker gained their initial foothold, I examined the phishing email associated with the incident.</p>
+                    <pre><code>cat /home/j.morgan/Mail/inbox/email_invoice.eml</code></pre>
+                    <div class="image-container">
+                        <img src="images/step3_phishing_email.png" alt="Phishing Email">
+                        <p class="image-caption">Figure 3: The phishing email that served as the initial access vector</p>
+                    </div>
+                    <div class="finding-box">
+                        <strong>Key Findings:</strong> Attack Method: Phishing | Attacker's Email: <code>akeane@poseidonenergy.net</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>Step 4: Tracing Privilege Escalation</h3>
+                    <p>I ran the <code>file_anomalies.py</code> script to identify suspicious files modified by the attacker. This led me to a file containing their bash history showing privilege escalation attempts.</p>
+                    <pre><code>cat /tmp/invoice_dump.txt</code></pre>
+                    <div class="image-container">
+                        <img src="images/step4_priv_escalation.png" alt="Privilege Escalation">
+                        <p class="image-caption">Figure 4: The attacker's bash history revealing privilege escalation commands</p>
+                    </div>
+                    <div class="finding-box">
+                        <strong>Key Finding:</strong> Command used: <code>sudo nano /home/r.house/.ssh/authorized_keys</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>Step 5: Locating Stolen Data</h3>
+                    <p>The <code>file_anomalies.py</code> script flagged a file with extremely high entropy, a strong indicator of encryption used in data exfiltration.</p>
+                    <pre><code>python3 /opt/dfir-lab/file_anomalies.py</code></pre>
+                    <div class="image-container">
+                        <img src="images/step5_data_exfil.png" alt="Data Exfiltration">
+                        <p class="image-caption">Figure 5: AI-flagged suspicious files highlighting the encrypted exfiltration archive</p>
+                    </div>
+                    <div class="finding-box">
+                        <strong>Key Finding:</strong> Archive path: <code>/dev/shm/.core_dump_2025.tgz.enc</code>
+                    </div>
+                </div>
+            </section>
+
+            <section class="conclusion">
+                <h2>Conclusion</h2>
+                <p>Through this investigation, I successfully reconstructed the attacker's chain of events: initial access via phishing, privilege escalation through SSH key manipulation, and data exfiltration using encrypted archives. This challenge reinforced my understanding of how AI-powered tools can accelerate DFIR workflows and demonstrated the value of integrating Machine Learning into security investigations.</p>
+            </section>
+
+            <div class="project-footer">
+                <a href="index.html" class="back-button">← Back to AI/ML Security Projects</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 AI/ML Security Portfolio. All rights reserved.</p>
+    </footer>
+</body>
+</html>
