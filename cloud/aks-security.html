@@ -89,6 +89,142 @@ I began by launching Azure Cloud Shell and reviewing the deployment requirements
      width="100%">
 
 </section>
+
+<section>
+
+<h3>2. Deploy Azure Kubernetes Service (AKS)</h3>
+
+<p>
+Azure Kubernetes Service (AKS) was deployed within the Azure subscription using
+Azure CLI. During deployment, networking, node configuration, and cluster
+settings were configured according to Microsoft security best practices.
+</p>
+
+<img src="../assets/img/cloud/aks-security/step02.png"
+     alt="Deploy AKS"
+     width="100%">
+
+</section>
+
+
+<section>
+
+<h3>3. Create Azure Container Registry (ACR)</h3>
+
+<p>
+A private Azure Container Registry was created to securely store container
+images. The registry provides centralized image management while preventing
+public access to production container images.
+</p>
+
+<img src="../assets/img/cloud/aks-security/step03.png"
+     alt="Azure Container Registry"
+     width="100%">
+
+</section>
+
+<section>
+
+    <h3>4. Configure Managed Identity</h3>
+
+    <p>
+        A managed identity was configured for the AKS cluster to securely authenticate
+        with Azure services without storing credentials. This approach improves security
+        by eliminating the need to manage secrets within applications.
+    </p>
+
+    <img
+        src="../assets/img/cloud/aks-security/step04.png"
+        alt="Configure Managed Identity"
+        width="100%">
+
+</section>
+
+<section>
+
+    <h3>5. Assign Azure RBAC Permissions</h3>
+
+    <p>
+        The <strong>AcrPull</strong> Azure RBAC role was assigned to the AKS managed
+        identity, allowing the Kubernetes cluster to securely pull container images
+        from Azure Container Registry while following the principle of least privilege.
+    </p>
+
+    <img
+        src="../assets/img/cloud/aks-security/step05.png"
+        alt="Assign AcrPull Role"
+        width="100%">
+
+</section>
+
+<section>
+
+    <h3>6. Configure Azure Firewall and Networking</h3>
+
+    <p>
+        Azure Firewall, DNS settings, and virtual network configurations were implemented
+        to secure communication between Azure resources and control inbound and outbound
+        traffic according to organizational security policies.
+    </p>
+
+    <img
+        src="../assets/img/cloud/aks-security/step06.png"
+        alt="Azure Firewall Configuration"
+        width="100%">
+
+</section>
+
+<section>
+
+    <h3>7. Validate the Deployment</h3>
+
+    <p>
+        The deployment was validated by confirming successful communication between
+        AKS and Azure Container Registry. Azure CLI commands and Azure Portal were used
+        to verify role assignments, DNS resolution, and successful image retrieval.
+    </p>
+
+    <img
+        src="../assets/img/cloud/aks-security/step07.png"
+        alt="Deployment Validation"
+        width="100%">
+
+</section>
+
+<section>
+
+    <h3>8. Clean Up Resources</h3>
+
+    <p>
+        After successfully completing the lab, all Azure resources created during the
+        deployment were removed to prevent unnecessary cloud costs and maintain a clean
+        Azure environment.
+    </p>
+
+    <img
+        src="../assets/img/cloud/aks-security/step08.png"
+        alt="Azure Resource Cleanup"
+        width="100%">
+
+</section>
+
+<section>
+
+    <h2>Conclusion</h2>
+
+    <p>
+        This project demonstrates practical experience deploying and securing Azure
+        Kubernetes Service (AKS) and Azure Container Registry (ACR) using Microsoft
+        Azure security best practices. The implementation showcases identity and access
+        management, secure container image delivery, network protection, Azure Firewall,
+        DNS configuration, and cloud resource governance required for securing
+        enterprise containerized workloads.
+    </p>
+
+</section>
+
+
+
 <section>
 
 <h2>Skills Demonstrated</h2>
