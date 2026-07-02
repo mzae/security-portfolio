@@ -68,7 +68,7 @@
 The following architecture illustrates how Azure Kubernetes Service (AKS) securely interacts with Azure Container Registry (ACR) using Managed Identity, Azure RBAC, Azure Firewall, and network segmentation.
 </p>
 
-<img src="../assets/img/cloud-security/aks-acr-architecture.png"
+<img src="../assets/img/cloud-security/architecture.png"
      alt="AKS and Azure Container Registry Architecture"
      width="100%">
 
@@ -84,7 +84,7 @@ The following architecture illustrates how Azure Kubernetes Service (AKS) secure
 I began by launching Azure Cloud Shell and reviewing the deployment requirements before creating the AKS cluster and Azure Container Registry.
 </p>
 
-<img src="../assets/img/cloud-security/step01-cloudshell.png"
+<img src="../assets/img/cloud-security/aks-security/environment-preparation.png"
      alt="Azure Cloud Shell"
      width="100%">
 
@@ -100,7 +100,7 @@ Azure CLI. During deployment, networking, node configuration, and cluster
 settings were configured according to Microsoft security best practices.
 </p>
 
-<img src="../assets/img/cloud/aks-security/step02.png"
+<img src="../assets/img/cloud-security/aks-security/resource-group.png"
      alt="Deploy AKS"
      width="100%">
 
@@ -117,7 +117,7 @@ images. The registry provides centralized image management while preventing
 public access to production container images.
 </p>
 
-<img src="../assets/img/cloud/aks-security/step03.png"
+<img src="../assets/img/cloud-security/aks-security/resource-group.png"
      alt="Azure Container Registry"
      width="100%">
 
@@ -134,7 +134,7 @@ public access to production container images.
     </p>
 
     <img
-        src="../assets/img/cloud/aks-security/step04.png"
+        src="../assets/img/cloud-security/aks-security/acrpull-role-assignment.png"
         alt="Configure Managed Identity"
         width="100%">
 
@@ -151,7 +151,7 @@ public access to production container images.
     </p>
 
     <img
-        src="../assets/img/cloud/aks-security/step05.png"
+        src="../assets/img/cloud-security/aks-security/firewall-application-rule.png"
         alt="Assign AcrPull Role"
         width="100%">
 
@@ -168,7 +168,7 @@ public access to production container images.
     </p>
 
     <img
-        src="../assets/img/cloud/aks-security/step06.png"
+        src="../assets/img/cloud-security/aks-security/firewall-network-rule.png"
         alt="Azure Firewall Configuration"
         width="100%">
 
@@ -185,7 +185,7 @@ public access to production container images.
     </p>
 
     <img
-        src="../assets/img/cloud/aks-security/step07.png"
+        src="../assets/img/cloud-security/aks-security/dns-configuration.png"
         alt="Deployment Validation"
         width="100%">
 
@@ -202,7 +202,7 @@ public access to production container images.
     </p>
 
     <img
-        src="../assets/img/cloud/aks-security/step08.png"
+        src="../assets/img/cloud-security/aks-security/deployment-validation.png"
         alt="Azure Resource Cleanup"
         width="100%">
 
