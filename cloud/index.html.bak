@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cloud Security Portfolio</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<nav>
+    <a href="../index.html">Home</a>
+    <a href="../cloud/index.html">Cloud Security</a>
+    <a href="../soc/index.html">SOC Analyst</a>
+    <a href="../aiml/index.html">AI/ML Security</a>
+    <a href="../projects/index.html">Projects</a>
+    <a href="../resume/index.html">Resume</a>
+</nav>
+
+<div class="container">
+
+<h1>Cloud Security Portfolio</h1>
+
+<p>
+Cloud security projects covering identity, networking,
+storage protection, and Azure security controls.
+</p>
+
+<div class="card-grid">
+
+<div class="card">
+<h3>Azure RBAC Security</h3>
+<a href="rbac-security.html">View Project</a>
+</div>
+
+<div class="card">
+<h3>AKS & Azure Container Registry Security</h3>
+
+<a href="aks-security.html">View Project</a>
+</div>
+
+<div class="card">
+<h3>Azure Storage Security</h3>
+<a href="storage-security.html">View Project</a>
+</div>
+
+<div class="card">
+<h3>Network Segmentation</h3>
+<a href="network-segmentation.html">View Project</a>
+</div>
+
+<div class="card">
+<h3>Azure Firewall</h3>
+<a href="azure-firewall.html">View Project</a>
+</div>
+
+</div>
+
+</div>
+</body>
+</html>

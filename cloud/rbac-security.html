@@ -18,75 +18,1229 @@
 
 <div class="container">
 
-<h1>Implementing Least-Privilege Access Control in Azure Using RBAC</h1>
 
-<h2>Overview</h2>
-
-<p>
-This project demonstrates the implementation of Role-Based Access
-Control (RBAC) in Microsoft Azure to enforce least-privilege access
-and strengthen cloud governance.
-</p>
-
-<h2>Business Problem</h2>
+<h1>Azure Role-Based Access Control (RBAC)</h1>
 
 <p>
-Organizations frequently grant excessive permissions to users,
-creating unnecessary security risk and increasing the attack surface.
-A structured access model was required to ensure users only received
-permissions necessary for their roles.
+
+This project demonstrates the implementation of Azure Role-Based Access Control
+(RBAC) to enforce the Principle of Least Privilege within a Microsoft Azure
+environment. Security groups were created, Azure roles were assigned, user
+permissions were validated, and governance controls were reviewed to establish
+a secure identity and access management model.
+
 </p>
+
+<hr>
+
+<section>
+
+<h2>Executive Summary</h2>
+
+<p>
+
+Identity and Access Management (IAM) is a fundamental component of cloud
+security. Azure Role-Based Access Control (RBAC) enables organizations to
+control access to cloud resources by assigning permissions based on users'
+responsibilities rather than granting unrestricted administrative access.
+
+</p>
+
+<p>
+
+In this project, Azure RBAC was implemented using Microsoft Entra ID security
+groups and built-in Azure roles. The implementation demonstrates how
+least-privilege access can be enforced while maintaining operational
+productivity, improving governance, and supporting Zero Trust security
+principles.
+
+</p>
+
+</section>
+
+<hr>
+
+<section>
+
+<h2>Project Overview</h2>
+
+<p>
+
+The objective of this project was to design and implement a secure access
+control model within Microsoft Azure using Role-Based Access Control (RBAC).
+Role-specific security groups were created to represent different operational
+teams, after which Azure built-in roles were assigned according to business
+responsibilities.
+
+</p>
+
+<p>
+
+The deployment concluded with validation testing to verify that users could
+perform only the actions permitted by their assigned permissions. Governance
+controls, audit logs, and Azure Security Center recommendations were also
+reviewed to demonstrate secure cloud administration and identity governance.
+
+</p>
+
+</section>
+
+<hr>
+
+<section>
+
+<h2>Business Scenario</h2>
+
+<p>
+
+A fictional organization hosts multiple production workloads within Microsoft
+Azure. Different IT teams require different levels of access to administer
+cloud resources. Granting all users administrative privileges would increase
+the organization's attack surface and create unnecessary security risks.
+
+</p>
+
+<p>
+
+To address this challenge, Azure Role-Based Access Control (RBAC) was
+implemented using Microsoft Entra ID security groups and Azure built-in roles.
+This approach ensures that users receive only the permissions required to
+perform their assigned responsibilities while supporting the Principle of Least
+Privilege and Microsoft's Zero Trust security model.
+
+</p>
+
+</section>
+
+<hr>
+
+<section>
 
 <h2>Objectives</h2>
 
 <ul>
-<li>Create role-specific security groups</li>
-<li>Assign appropriate Azure RBAC roles</li>
-<li>Validate access restrictions</li>
-<li>Review governance and audit controls</li>
+
+<li>Create role-specific Microsoft Entra ID security groups.</li>
+
+<li>Assign Azure built-in roles based on operational responsibilities.</li>
+
+<li>Implement the Principle of Least Privilege.</li>
+
+<li>Validate user permissions through practical testing.</li>
+
+<li>Review governance policies and audit logging.</li>
+
+<li>Strengthen cloud identity and access management.</li>
+
 </ul>
 
-<h2>Architecture</h2>
+</section>
+
+<hr>
+
+<section>
+
+<h2>Architecture Overview</h2>
 
 <p>
-Azure Entra ID Groups → Azure RBAC Roles → Resource Group → Virtual Machines
+
+The RBAC implementation separates identity management from resource
+administration by assigning Azure permissions to security groups rather than
+directly to individual users. This simplifies administration, improves
+governance, and enables scalable permission management across enterprise cloud
+environments.
+
 </p>
 
-<h2>Implementation</h2>
+<img
+src="../assets/img/cloud-security/rbac/task1-group-creation.png"
+alt="Azure RBAC Security Groups"
+class="project-image">
 
-<ol>
-<li>Created Senior Admins, Junior Admins, and Service Desk groups</li>
-<li>Assigned Virtual Machine Contributor permissions</li>
-<li>Validated VM access capabilities</li>
-<li>Tested restricted administrative actions</li>
-<li>Reviewed audit logs and governance controls</li>
-</ol>
+<p class="image-caption">
 
-<h2>Security Outcome</h2>
+<strong>Figure 1.</strong>
+
+Microsoft Entra ID security groups representing different operational roles
+used throughout the RBAC implementation.
+
+</p>
+
+</section>
+
+<hr>
+
+<section>
+
+<h2>Technologies Used</h2>
+
+<table class="project-table">
+
+<tr>
+
+<th>Technology</th>
+
+<th>Purpose</th>
+
+</tr>
+
+<tr>
+
+<td>Microsoft Azure</td>
+
+<td>Cloud platform hosting the protected resources.</td>
+
+</tr>
+
+<tr>
+
+<td>Microsoft Entra ID</td>
+
+<td>Identity management and security group administration.</td>
+
+</tr>
+
+<tr>
+
+<td>Azure Role-Based Access Control (RBAC)</td>
+
+<td>Provides authorization and access management for Azure resources.</td>
+
+</tr>
+
+<tr>
+
+<td>Azure Resource Groups</td>
+
+<td>Logical grouping and management of cloud resources.</td>
+
+</tr>
+
+<tr>
+
+<td>Azure Virtual Machines</td>
+
+<td>Resources used to validate delegated permissions.</td>
+
+</tr>
+
+<tr>
+
+<td>Azure Monitor & Audit Logs</td>
+
+<td>Provides visibility into administrative activities and role assignments.</td>
+
+</tr>
+
+<tr>
+
+<td>Microsoft Defender for Cloud</td>
+
+<td>Reviews cloud security posture and governance recommendations.</td>
+
+</tr>
+
+</table>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- IMPLEMENTATION PHASE 1 STARTS BELOW -->
+<!-- ========================================= -->
+ 
+
+
+<section>
+
+<h2>Implementation Phase 1 – Create Security Groups</h2>
+
+<h3>Objective</h3>
+
+<p>
+
+The first stage of the implementation focused on establishing a structured
+identity management model using Microsoft Entra ID security groups. Rather than
+assigning permissions directly to individual users, role-specific security
+groups were created to represent different operational responsibilities within
+the organization. This approach simplifies permission management, improves
+governance, and supports the Principle of Least Privilege.
+
+</p>
+
+<h3>Implementation</h3>
+
+<p>
+
+Three security groups were created within Microsoft Entra ID to represent
+different administrative responsibilities across the Azure environment.
+Each group was designed to receive only the permissions required for its
+operational role.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/rbac/task1-group-creation.png"
+alt="Microsoft Entra ID Security Groups"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 2.</strong>
+Creation of Microsoft Entra ID security groups used throughout the RBAC
+implementation.
+
+</p>
+
+<h3>Security Groups Created</h3>
+
+<table class="project-table">
+
+<tr>
+<th>Security Group</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>Senior Admins</td>
+<td>Full administrative management of Azure resources.</td>
+</tr>
+
+<tr>
+<td>Junior Admins</td>
+<td>Limited administrative responsibilities with restricted permissions.</td>
+</tr>
+
+<tr>
+<td>Service Desk</td>
+<td>Operational management of virtual machines without elevated administrative privileges.</td>
+</tr>
+
+</table>
+
+<h3>Why This Phase Matters</h3>
+
+<p>
+
+Using security groups instead of assigning permissions directly to users
+provides a scalable identity management model. As users join or leave the
+organization, administrators only need to update group membership rather than
+reconfigure permissions across multiple Azure resources. This significantly
+reduces administrative overhead while improving consistency and security.
+
+</p>
+
+<div class="info-box">
+
+<h3>Security Benefits</h3>
 
 <ul>
-<li>Least-privilege access enforced</li>
-<li>Unauthorized actions prevented</li>
-<li>Administrative activities auditable</li>
-<li>Improved governance posture</li>
+
+<li>Centralized identity management.</li>
+
+<li>Simplified permission administration.</li>
+
+<li>Supports the Principle of Least Privilege.</li>
+
+<li>Reduces the risk of excessive user permissions.</li>
+
+<li>Improves scalability for enterprise environments.</li>
+
+<li>Provides a strong foundation for Azure RBAC implementation.</li>
+
 </ul>
 
-<h2>Key Skills Demonstrated</h2>
+</div>
+
+<h3>Outcome</h3>
+
+<p>
+
+The required Microsoft Entra ID security groups were successfully created,
+providing the foundation for implementing Azure Role-Based Access Control.
+With the identity structure established, the next phase involved assigning
+appropriate Azure built-in roles to each security group based on operational
+responsibilities.
+
+</p>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- IMPLEMENTATION PHASE 2 STARTS BELOW -->
+<!-- ========================================= -->
+
+
+
+<!-- ========================================= -->
+<!-- IMPLEMENTATION PHASE 2 -->
+<!-- ========================================= -->
+
+<section>
+
+<h2>Implementation Phase 2 – Assign Azure RBAC Roles</h2>
+
+<h3>Objective</h3>
+
+<p>
+
+With the Microsoft Entra ID security groups successfully created, the next
+phase involved assigning Azure Role-Based Access Control (RBAC) roles based on
+operational responsibilities. Azure's built-in roles enable organizations to
+delegate administrative tasks without granting unnecessary permissions,
+supporting the Principle of Least Privilege and reducing the risk of privilege
+escalation.
+
+</p>
+
+<h3>Implementation</h3>
+
+<p>
+
+The <strong>Virtual Machine Contributor</strong> role was assigned to the
+<strong>Service Desk</strong> security group through Azure's
+<strong>Access Control (IAM)</strong> interface. This built-in role allows
+members of the Service Desk team to perform routine virtual machine management
+tasks without providing broader administrative access to Azure resources.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/rbac/task2-role-assignment.png"
+alt="Assigning Azure RBAC Role"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 3.</strong>
+Assigning the Virtual Machine Contributor role to the Service Desk security
+group using Azure Access Control (IAM).
+
+</p>
+
+<p>
+
+After selecting the appropriate built-in role, the assignment was reviewed and
+confirmed. Azure immediately applied the new permissions, making them available
+to members of the Service Desk group.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/rbac/task2-assignment-confirmation.png"
+alt="Azure RBAC Role Assignment Confirmation"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 4.</strong>
+Successful confirmation of the Azure RBAC role assignment.
+
+</p>
+
+<h3>Role Assignment Summary</h3>
+
+<table class="project-table">
+
+<tr>
+<th>Security Group</th>
+<th>Azure Role</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>Senior Admins</td>
+<td>Owner / Administrator</td>
+<td>Full administrative control of Azure resources.</td>
+</tr>
+
+<tr>
+<td>Junior Admins</td>
+<td>Reader (or Limited Administrative Role)</td>
+<td>View Azure resources without making unauthorized changes.</td>
+</tr>
+
+<tr>
+<td>Service Desk</td>
+<td>Virtual Machine Contributor</td>
+<td>Manage virtual machines without elevated administrative privileges.</td>
+</tr>
+
+</table>
+
+<h3>Why This Phase Matters</h3>
+
+<p>
+
+Azure RBAC separates authentication from authorization by controlling what
+authenticated users are permitted to do within Azure. Assigning permissions
+through security groups instead of individual user accounts simplifies
+administration, improves consistency, and significantly reduces the likelihood
+of excessive permissions across the environment.
+
+</p>
+
+<div class="info-box">
+
+<h3>Security Benefits</h3>
 
 <ul>
-<li>Azure RBAC</li>
-<li>Identity & Access Management</li>
-<li>Zero Trust Principles</li>
-<li>Cloud Governance</li>
-<li>Security Auditing</li>
+
+<li>Implements the Principle of Least Privilege.</li>
+
+<li>Reduces the attack surface by limiting administrative permissions.</li>
+
+<li>Simplifies permission management using security groups.</li>
+
+<li>Supports scalable identity governance.</li>
+
+<li>Improves accountability through centralized role assignments.</li>
+
+<li>Aligns with Microsoft's Zero Trust security model.</li>
+
 </ul>
+
+</div>
+
+<h3>Outcome</h3>
+
+<p>
+
+The required Azure RBAC roles were successfully assigned to the appropriate
+security groups. With authorization policies now in place, the environment was
+ready for validation testing to verify that users could perform only the
+actions permitted by their assigned roles.
+
+</p>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- IMPLEMENTATION PHASE 3 STARTS BELOW -->
+<!-- ========================================= -->
+
+
+<section>
+
+<h2>Implementation Phase 3 – Validate Access Control</h2>
+
+<h3>Objective</h3>
+
+<p>
+
+After assigning Azure RBAC roles, the next step was to verify that the
+configured permissions were being enforced correctly. Validation testing was
+performed by signing in with a user belonging to the Service Desk security
+group and attempting common virtual machine management tasks. The objective was
+to confirm that authorized actions were permitted while privileged operations
+remained restricted.
+
+</p>
+
+<h3>Implementation</h3>
+
+<p>
+
+The Service Desk user accessed the Azure Portal and navigated to the virtual
+machine dashboard. Because the user had been assigned the
+<strong>Virtual Machine Contributor</strong> role, they were able to view and
+manage virtual machine resources without requiring full administrative
+privileges.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/rbac/task3-vm-dashboard.png"
+alt="Azure Virtual Machine Dashboard"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 5.</strong>
+Virtual machine dashboard successfully accessed using delegated RBAC
+permissions.
+
+</p>
+
+<p>
+
+Operational tasks such as starting a virtual machine were then performed
+successfully, demonstrating that the assigned role provided the intended level
+of access for day-to-day administration.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/rbac/task3-vm-start.png"
+alt="Starting Azure Virtual Machine"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 6.</strong>
+Starting a virtual machine using the Virtual Machine Contributor role.
+
+</p>
+
+<p>
+
+Finally, an administrative action outside the assigned permissions was
+attempted. Azure correctly prevented the operation, confirming that RBAC
+policies were enforcing least-privilege access and blocking unauthorized
+administrative changes.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/rbac/task3-vm-restricted-action.png"
+alt="Restricted Azure Administrative Action"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 7.</strong>
+Attempting a restricted administrative action that was denied by Azure RBAC.
+
+</p>
+
+<h3>Validation Results</h3>
+
+<table class="project-table">
+
+<tr>
+<th>Test Performed</th>
+<th>Result</th>
+</tr>
+
+<tr>
+<td>Access Virtual Machine Dashboard</td>
+<td>✅ Successful</td>
+</tr>
+
+<tr>
+<td>Start Virtual Machine</td>
+<td>✅ Successful</td>
+</tr>
+
+<tr>
+<td>Perform Unauthorized Administrative Action</td>
+<td>❌ Blocked by Azure RBAC</td>
+</tr>
+
+</table>
+
+<h3>Why This Phase Matters</h3>
+
+<p>
+
+Security controls should always be validated after implementation. Simply
+assigning permissions does not guarantee that access policies are functioning
+as intended. By testing both permitted and restricted actions, organizations
+can verify that Azure RBAC is enforcing authorization policies correctly and
+protecting critical cloud resources from unauthorized modification.
+
+</p>
+
+<div class="info-box">
+
+<h3>Security Benefits</h3>
+
+<ul>
+
+<li>Verified enforcement of least-privilege access.</li>
+
+<li>Confirmed successful authorization for approved operations.</li>
+
+<li>Prevented unauthorized administrative actions.</li>
+
+<li>Validated the effectiveness of Azure RBAC policies.</li>
+
+<li>Reduced the likelihood of privilege misuse.</li>
+
+<li>Demonstrated practical Zero Trust enforcement.</li>
+
+</ul>
+
+</div>
+
+<h3>Outcome</h3>
+
+<p>
+
+Permission validation confirmed that Azure RBAC was functioning as expected.
+Authorized users were able to perform their assigned responsibilities, while
+privileged administrative actions remained protected. This successful
+validation provided confidence that the identity and access management model
+was correctly enforcing organizational security policies.
+
+</p>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- IMPLEMENTATION PHASE 4 STARTS BELOW -->
+<!-- ========================================= -->
+
+<section>
+
+<h2>Implementation Phase 4 – Review Role Assignments</h2>
+
+<h3>Objective</h3>
+
+<p>
+
+Once access validation was successfully completed, the next phase focused on
+reviewing the configured role assignments. Regular reviews of Azure RBAC
+permissions help ensure that users and groups retain only the access required
+for their responsibilities while supporting governance, compliance, and
+security best practices.
+
+</p>
+
+<h3>Implementation</h3>
+
+<p>
+
+The Azure Portal's <strong>Access Control (IAM)</strong> interface was used to
+review all role assignments associated with the configured security groups. The
+review confirmed that each group had been assigned the appropriate Azure
+built-in role according to its operational responsibilities.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/rbac/task4-role-overview.png"
+alt="Azure RBAC Role Assignments Overview"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 8.</strong>
+Review of Azure RBAC role assignments showing security groups and their
+associated permissions.
+
+</p>
+
+<h3>Role Assignment Review</h3>
+
+<table class="project-table">
+
+<tr>
+<th>Security Group</th>
+<th>Assigned Role</th>
+<th>Review Status</th>
+</tr>
+
+<tr>
+<td>Senior Admins</td>
+<td>Owner / Administrator</td>
+<td>✅ Verified</td>
+</tr>
+
+<tr>
+<td>Junior Admins</td>
+<td>Reader (or Limited Administrative Role)</td>
+<td>✅ Verified</td>
+</tr>
+
+<tr>
+<td>Service Desk</td>
+<td>Virtual Machine Contributor</td>
+<td>✅ Verified</td>
+</tr>
+
+</table>
+
+<h3>Why This Phase Matters</h3>
+
+<p>
+
+Periodic reviews of role assignments are an essential component of Identity and
+Access Management (IAM). As organizations grow and personnel change roles,
+permissions can become outdated or excessive. Conducting regular RBAC reviews
+helps identify unnecessary privileges, supports compliance requirements, and
+reduces the risk of privilege escalation or unauthorized access.
+
+</p>
+
+<div class="info-box">
+
+<h3>Security Benefits</h3>
+
+<ul>
+
+<li>Verifies that role assignments remain appropriate.</li>
+
+<li>Supports ongoing access governance.</li>
+
+<li>Helps identify excessive or unnecessary permissions.</li>
+
+<li>Improves accountability through documented access reviews.</li>
+
+<li>Strengthens compliance with security policies.</li>
+
+<li>Reduces the risk of privilege escalation.</li>
+
+</ul>
+
+</div>
+
+<h3>Outcome</h3>
+
+<p>
+
+The review confirmed that all configured security groups had the correct Azure
+RBAC roles assigned. No excessive permissions were identified, demonstrating
+that the environment was operating according to the Principle of Least
+Privilege and established governance requirements.
+
+</p>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- IMPLEMENTATION PHASE 5 STARTS BELOW -->
+<!-- ========================================= -->
+
+
+<section>
+
+<h2>Implementation Phase 5 – Governance and Compliance Validation</h2>
+
+<h3>Objective</h3>
+
+<p>
+
+The final phase of the project focused on validating the overall security
+posture of the Azure environment. After implementing Role-Based Access Control
+(RBAC) and verifying user permissions, governance policies, security
+recommendations, and audit logs were reviewed to ensure that access management
+aligned with organizational security standards and Microsoft's Zero Trust
+framework.
+
+</p>
+
+<h3>Implementation</h3>
+
+<p>
+
+Azure governance features were reviewed to confirm that RBAC had been
+implemented according to security best practices. Policy recommendations,
+security posture assessments, and activity logs were examined to verify that
+role assignments were properly documented and that administrative actions could
+be audited.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/rbac/task5-policy-review.png"
+alt="Azure Policy Review"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 9.</strong>
+Reviewing Azure governance policies to validate RBAC implementation.
+
+</p>
+
+<p>
+
+Microsoft Defender for Cloud was then reviewed to assess the overall security
+posture of the Azure environment and identify recommendations related to
+identity management, access control, and cloud governance.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/rbac/task5-security-center.png"
+alt="Microsoft Defender for Cloud"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 10.</strong>
+Microsoft Defender for Cloud providing security posture and governance
+recommendations.
+
+</p>
+
+<p>
+
+Finally, Azure Activity Logs were inspected to confirm that role assignments
+and administrative actions were successfully recorded. These logs provide
+valuable evidence for security investigations, compliance reporting, and
+operational monitoring.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/rbac/task5-audit-log.png"
+alt="Azure Activity Log"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 11.</strong>
+Azure Activity Log recording RBAC administrative activities and access events.
+
+</p>
+
+<h3>Governance Review Summary</h3>
+
+<table class="project-table">
+
+<tr>
+<th>Governance Control</th>
+<th>Purpose</th>
+<th>Status</th>
+</tr>
+
+<tr>
+<td>Azure Policy Review</td>
+<td>Validate compliance with organizational security policies.</td>
+<td>✅ Completed</td>
+</tr>
+
+<tr>
+<td>Microsoft Defender for Cloud</td>
+<td>Assess cloud security posture and recommendations.</td>
+<td>✅ Reviewed</td>
+</tr>
+
+<tr>
+<td>Azure Activity Logs</td>
+<td>Audit administrative actions and role assignments.</td>
+<td>✅ Verified</td>
+</tr>
+
+</table>
+
+<h3>Why This Phase Matters</h3>
+
+<p>
+
+Implementing security controls is only one aspect of cloud security. Effective
+governance requires continuous monitoring, auditing, and compliance validation.
+Reviewing Azure policies, security recommendations, and activity logs ensures
+that access controls remain effective over time while providing visibility into
+administrative activities. These capabilities are essential for regulatory
+compliance, incident response, and maintaining a strong security posture.
+
+</p>
+
+<div class="info-box">
+
+<h3>Security Benefits</h3>
+
+<ul>
+
+<li>Validated compliance with Azure security best practices.</li>
+
+<li>Improved visibility into administrative activities.</li>
+
+<li>Supported continuous security monitoring.</li>
+
+<li>Provided evidence for auditing and compliance reporting.</li>
+
+<li>Strengthened governance through regular policy reviews.</li>
+
+<li>Enhanced the organization's overall cloud security posture.</li>
+
+</ul>
+
+</div>
+
+<h3>Outcome</h3>
+
+<p>
+
+The governance review confirmed that Azure Role-Based Access Control had been
+implemented successfully and was supported by appropriate monitoring, policy
+validation, and audit capabilities. Together, these controls provide a
+well-governed identity and access management framework that aligns with
+enterprise security requirements and Microsoft's Zero Trust principles.
+
+</p>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- FINAL PROJECT SUMMARY SECTIONS START BELOW -->
+<!-- ========================================= -->
+
+
+<section>
+
+<h2>Security Controls Implemented</h2>
+
+<ul>
+
+<li>Role-Based Access Control (RBAC) using Azure built-in roles.</li>
+
+<li>Microsoft Entra ID security groups for centralized identity management.</li>
+
+<li>Principle of Least Privilege (PoLP) to minimize excessive permissions.</li>
+
+<li>Group-based permission assignments instead of direct user assignments.</li>
+
+<li>Access validation through practical authorization testing.</li>
+
+<li>Governance reviews using Azure Policy and Microsoft Defender for Cloud.</li>
+
+<li>Administrative auditing using Azure Activity Logs.</li>
+
+<li>Zero Trust access model through controlled authorization.</li>
+
+</ul>
+
+</section>
+
+<hr>
+
+<section>
+
+<h2>Challenges Encountered</h2>
+
+<table class="project-table">
+
+<tr>
+
+<th>Challenge</th>
+
+<th>Resolution</th>
+
+</tr>
+
+<tr>
+
+<td>Understanding Azure's built-in RBAC roles.</td>
+
+<td>Reviewed Microsoft's RBAC documentation to select the most appropriate permissions.</td>
+
+</tr>
+
+<tr>
+
+<td>Ensuring users received only the required permissions.</td>
+
+<td>Implemented role assignments using security groups rather than assigning permissions directly to users.</td>
+
+</tr>
+
+<tr>
+
+<td>Validating authorization policies.</td>
+
+<td>Performed practical testing using different user accounts to verify both permitted and restricted actions.</td>
+
+</tr>
+
+<tr>
+
+<td>Reviewing governance compliance.</td>
+
+<td>Used Azure Policy, Microsoft Defender for Cloud, and Activity Logs to validate the security posture.</td>
+
+</tr>
+
+</table>
+
+</section>
+
+<hr>
+
+<section>
+
+<h2>Skills Demonstrated</h2>
+
+<div class="card-grid">
+
+<div class="card">
+
+<h3>Identity & Access Management</h3>
+
+<p>
+Implemented secure authorization using Microsoft Entra ID and Azure RBAC.
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>Azure RBAC Administration</h3>
+
+<p>
+Assigned built-in Azure roles following the Principle of Least Privilege.
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>Cloud Governance</h3>
+
+<p>
+Reviewed governance recommendations, policies, and security posture.
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>Security Validation</h3>
+
+<p>
+Verified authorized and unauthorized operations through practical testing.
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>Auditing & Compliance</h3>
+
+<p>
+Reviewed Azure Activity Logs to improve accountability and compliance.
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>Zero Trust Security</h3>
+
+<p>
+Applied identity-first security principles using role-based authorization.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<hr>
+
+<section>
 
 <h2>Lessons Learned</h2>
 
 <p>
-RBAC is a foundational cloud security control that enables secure
-delegation of responsibilities while reducing operational risk.
+
+Implementing Azure Role-Based Access Control demonstrated that effective cloud
+security begins with strong identity governance. Rather than assigning
+permissions directly to individual users, using Microsoft Entra ID security
+groups provides a scalable and maintainable authorization model.
+
 </p>
+
+<p>
+
+This project reinforced the importance of the Principle of Least Privilege,
+showing that users should receive only the permissions required for their
+responsibilities. Practical validation exercises confirmed that Azure RBAC
+effectively prevented unauthorized administrative actions while allowing
+approved operational tasks.
+
+</p>
+
+<p>
+
+The project also highlighted that cloud security extends beyond configuration.
+Continuous governance, monitoring, auditing, and policy reviews are essential
+for maintaining a secure Azure environment and supporting compliance
+requirements.
+
+</p>
+
+</section>
+
+<hr>
+
+<section>
+
+<h2>References</h2>
+
+<ul>
+
+<li>Microsoft Learn – Secure Azure Resources with Role-Based Access Control (RBAC)</li>
+
+<li>Microsoft Learn – Microsoft Entra ID Documentation</li>
+
+<li>Microsoft Learn – Azure Built-in Roles</li>
+
+<li>Microsoft Learn – Azure Policy Documentation</li>
+
+<li>Microsoft Learn – Microsoft Defender for Cloud Documentation</li>
+
+<li>Microsoft Learn – Azure Activity Logs Documentation</li>
+
+</ul>
+
+</section>
+
+<hr>
+
+<section>
+
+<h2>Related Projects</h2>
+
+<ul>
+
+<li><a href="azure-firewall.html">Azure Firewall Deployment and Traffic Control</a></li>
+
+<li><a href="storage-security.html">Azure Storage Security</a></li>
+
+<li><a href="network-segmentation.html">Azure Network Segmentation</a></li>
+
+<li><a href="aks-security.html">AKS & Azure Container Registry Security</a></li>
+
+</ul>
+
+</section>
+
+<hr>
+
+<section>
+
+<h2>Project Summary</h2>
+
+<p>
+
+This project successfully demonstrated the implementation of Azure
+Role-Based Access Control (RBAC) using Microsoft Entra ID security groups and
+Azure built-in roles. By applying the Principle of Least Privilege, validating
+user permissions, reviewing governance controls, and auditing administrative
+activities, a secure and scalable identity management framework was
+established.
+
+</p>
+
+<p>
+
+The project strengthened practical skills in Identity and Access Management
+(IAM), Azure RBAC administration, governance, compliance monitoring, and Zero
+Trust security principles. Together with the Azure Firewall project, it forms a
+strong foundation for demonstrating enterprise cloud security capabilities
+within this portfolio.
+
+</p>
+
+</section>
+
+
 
 </div>
 

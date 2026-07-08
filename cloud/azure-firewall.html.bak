@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Azure Firewall Configuration & Testing | Daniel Wanjama</title>
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+
+</head>
+
+<body>
+
+    <!-- ========================================= -->
+    <!-- Navigation -->
+    <!-- ========================================= -->
+
+    <nav>
+
+        <a href="../index.html">Home</a>
+        <a href="../cloud/index.html">Cloud Security</a>
+        <a href="../soc/index.html">SOC Analyst</a>
+        <a href="../aiml/index.html">AI/ML Security</a>
+        <a href="../projects/index.html">Projects</a>
+        <a href="../resume/index.html">Resume</a>
+        <a href="../contact/index.html">Contact</a>
+
+    </nav>
+
+    <!-- ========================================= -->
+    <!-- Main Container -->
+    <!-- ========================================= -->
+
+    <div class="container">
+
+        <!-- ========================================= -->
+        <!-- Hero -->
+        <!-- ========================================= -->
+
+        <section class="hero">
+
+            <h1>Azure Firewall Configuration & Testing</h1>
+
+            <p>
+
+                A hands-on cloud security project demonstrating the deployment,
+                configuration, and validation of Microsoft Azure Firewall to
+                protect Azure workloads using centralized traffic inspection,
+                network security policies, and controlled routing.
+
+            </p>
+
+        </section>
+
+        <hr>
+
+        <!-- ========================================= -->
+        <!-- Executive Summary -->
+        <!-- ========================================= -->
+
+        <section>
+
+            <h2>Executive Summary</h2>
+
+            <p>
+
+                Azure Firewall is Microsoft's cloud-native, fully managed,
+                stateful firewall service that provides centralized protection
+                for Azure resources. It enables organizations to inspect,
+                filter, and monitor both inbound and outbound network traffic
+                while enforcing consistent security policies across cloud
+                environments.
+
+            </p>
+
+            <p>
+
+                In this project I deployed Azure Firewall, configured routing,
+                implemented application and network rules, enabled DNS Proxy,
+                and validated firewall functionality through connectivity
+                testing. The project demonstrates practical cloud security
+                skills and follows Microsoft Azure security best practices.
+
+            </p>
+
+        </section>
+
+        <hr>
+
+        <!-- ========================================= -->
+        <!-- Project Overview -->
+        <!-- ========================================= -->
+
+        <section>
+
+            <h2>Project Overview</h2>
+
+            <table class="project-table">
+
+                <tr>
+                    <th>Project</th>
+                    <td>Azure Firewall Configuration & Testing</td>
+                </tr>
+
+                <tr>
+                    <th>Category</th>
+                    <td>Cloud Security</td>
+                </tr>
+
+                <tr>
+                    <th>Platform</th>
+                    <td>Microsoft Azure</td>
+                </tr>
+
+                <tr>
+                    <th>Difficulty</th>
+                    <td>Intermediate</td>
+                </tr>
+
+                <tr>
+                    <th>Environment</th>
+                    <td>Azure Learn Lab</td>
+                </tr>
+
+            </table>
+
+        </section>
+
+        <hr>
+
+        <!-- ========================================= -->
+        <!-- Business Scenario -->
+        <!-- ========================================= -->
+
+        <section>
+
+            <h2>Business Scenario</h2>
+
+            <p>
+
+                Organizations increasingly host business-critical workloads in
+                Microsoft Azure. Without centralized network security, virtual
+                machines and applications may communicate directly with the
+                Internet, increasing the attack surface and reducing visibility
+                into network activity.
+
+            </p>
+
+            <p>
+
+                To strengthen cloud security, Azure Firewall was deployed as
+                the primary network security control. The firewall provides
+                centralized traffic inspection, policy enforcement, and
+                monitoring, helping ensure that only authorized traffic reaches
+                protected Azure resources.
+
+            </p>
+
+        </section>
+
+        <hr>
+
+        <!-- ========================================= -->
+        <!-- Project Objectives -->
+        <!-- ========================================= -->
+
+        <section>
+
+            <h2>Project Objectives</h2>
+
+            <ul>
+
+                <li>Deploy Azure Firewall.</li>
+
+                <li>Create a secure Azure networking environment.</li>
+
+                <li>Configure User Defined Routes (UDRs).</li>
+
+                <li>Create Application Rules.</li>
+
+                <li>Create Network Rules.</li>
+
+                <li>Configure DNS Proxy.</li>
+
+                <li>Validate firewall functionality.</li>
+
+                <li>Apply Azure networking security best practices.</li>
+
+            </ul>
+
+        </section>
+
+        <hr>
+
+        <!-- ========================================= -->
+        <!-- Architecture -->
+        <!-- ========================================= -->
+
+        <section>
+
+            <h2>Solution Architecture</h2>
+
+            <p>
+
+                The Azure Firewall acts as the centralized inspection point for
+                all traffic leaving the protected Azure Virtual Network.
+
+            </p>
+
+            <img
+            src="../assets/img/cloud-security/azure-firewall/architecture.png"
+            alt="Azure Firewall Architecture"
+            class="project-image">
+
+            <p class="image-caption">
+
+                Figure 1. Azure Firewall architecture showing centralized
+                traffic inspection.
+
+            </p>
+
+        </section>
+
+        <hr>
+
+        <!-- ========================================= -->
+        <!-- Technologies -->
+        <!-- ========================================= -->
+
+        <section>
+
+            <h2>Technologies Used</h2>
+
+            <ul>
+
+                <li>Microsoft Azure</li>
+
+                <li>Azure Firewall</li>
+
+                <li>Azure Portal</li>
+
+                <li>Azure Virtual Network</li>
+
+                <li>Azure Resource Manager (ARM)</li>
+
+                <li>Route Tables</li>
+
+                <li>DNS Proxy</li>
+
+            </ul>
+
+        </section>
+
+        <hr>
+
+        <!-- ========================================= -->
+        <!-- IMPLEMENTATION -->
+        <!-- ========================================= -->
+
+        <section>
+
+            <h2>Implementation</h2>
+
+            <p>
+
+                The implementation was completed through a series of structured
+                deployment and configuration tasks. Each stage was verified
+                before proceeding to the next to ensure a secure and functional
+                Azure environment.
+
+            </p>
+
+        </section>
+
+        <hr>
+
+        <!-- ========================================= -->
+        <!-- STEP 1 -->
+        <!-- ========================================= -->
+
+        <section>
+
+            <h2>Step 1 – Deploy the Lab Environment</h2>
+
+            <h3>Objective</h3>
+
+            <p>
+
+                Before Azure Firewall could be deployed, the Azure networking
+                environment was provisioned using an Azure Resource Manager
+                (ARM) template. This automated the deployment of all required
+                infrastructure components and ensured a consistent lab
+                environment.
+
+            </p>
+
+            <img
+            src="../assets/img/cloud-security/azure-firewall/task1-arm-template-deployment.png"
+            alt="ARM Template Deployment"
+            class="project-image">
+
+            <p class="image-caption">
+
+                Figure 2. ARM template deployment creating the Azure lab
+                environment.
+
+            </p>
+
+            <h3>Resources Created</h3>
+
+            <ul>
+
+                <li>Azure Resource Group</li>
+
+                <li>Azure Virtual Network</li>
+
+                <li>AzureFirewallSubnet</li>
+
+                <li>Virtual Machine Subnets</li>
+
+                <li>Supporting Azure Resources</li>
+
+            </ul>
+
+            <h3>Why This Step Matters</h3>
+
+            <p>
+
+                Infrastructure as Code improves deployment consistency,
+                minimizes manual configuration errors, and enables cloud
+                environments to be recreated quickly. It is considered a best
+                practice within modern cloud security and DevSecOps workflows.
+
+            </p>
+
+            <h3>Outcome</h3>
+
+            <p>
+
+                The Azure infrastructure was successfully deployed and validated,
+                providing the networking foundation required for Azure Firewall
+                deployment.
+
+            </p>
+
+        </section>
+
+        <hr>
+
+        <!-- STEP 2 STARTS BELOW -->
+
+        <!-- ========================================= -->
+<!-- STEP 2 -->
+<!-- ========================================= -->
+
+<section>
+
+    <h2>Step 2 – Deploy Azure Firewall</h2>
+
+    <h3>Objective</h3>
+
+    <p>
+
+        After the Azure networking environment was successfully provisioned,
+        Azure Firewall was deployed to provide centralized network security.
+        Azure Firewall is a cloud-native, fully managed, stateful firewall
+        service that protects Azure resources by inspecting, filtering, and
+        controlling network traffic based on administrator-defined security
+        policies.
+
+    </p>
+
+    <h3>Deployment Process</h3>
+
+    <p>
+
+        The firewall was deployed through the Azure Portal and associated with
+        the previously created <strong>AzureFirewallSubnet</strong>. During
+        deployment, a dedicated public IP address was allocated to the firewall,
+        allowing it to securely inspect and manage inbound and outbound traffic.
+        Once provisioning completed successfully, Azure Firewall became the
+        central security gateway for the virtual network.
+
+    </p>
+
+    <img
+    src="../assets/img/cloud-security/azure-firewall/task2-firewall-deployment.png"
+    alt="Azure Firewall Deployment"
+    class="project-image">
+
+    <p class="image-caption">
+
+        <strong>Figure 3.</strong> Azure Firewall successfully deployed and
+        associated with the Azure Virtual Network.
+
+    </p>
+
+    <h3>Deployment Components</h3>
+
+    <table class="project-table">
+
+        <tr>
+            <th>Component</th>
+            <th>Description</th>
+        </tr>
+
+        <tr>
+            <td>Azure Firewall</td>
+            <td>Provides centralized inspection and filtering of network traffic.</td>
+        </tr>
+
+        <tr>
+            <td>AzureFirewallSubnet</td>
+            <td>Dedicated subnet required by Azure Firewall.</td>
+        </tr>
+
+        <tr>
+            <td>Public IP Address</td>
+            <td>Enables secure communication between Azure resources and external networks.</td>
+        </tr>
+
+        <tr>
+            <td>Azure Virtual Network</td>
+            <td>Hosts the protected workloads secured by the firewall.</td>
+        </tr>
+
+    </table>
+
+    <h3>Security Benefits</h3>
+
+    <div class="info-box">
+
+        <ul>
+
+            <li>Provides centralized network security management.</li>
+
+            <li>Performs stateful inspection of inbound and outbound traffic.</li>
+
+            <li>Supports Network Rules, Application Rules, and NAT Rules.</li>
+
+            <li>Integrates with Azure Monitor and diagnostic logging.</li>
+
+            <li>Improves visibility into network communications.</li>
+
+            <li>Reduces the attack surface by enforcing centralized security policies.</li>
+
+        </ul>
+
+    </div>
+
+    <h3>Why This Step Matters</h3>
+
+    <p>
+
+        Deploying Azure Firewall establishes a single point of control for
+        network security within the Azure environment. Instead of allowing
+        workloads to communicate directly with external networks, all traffic
+        can now be inspected before it reaches its destination. This supports
+        Zero Trust principles by ensuring that traffic is explicitly evaluated
+        against defined security rules before being permitted.
+
+    </p>
+
+    <h3>Outcome</h3>
+
+    <p>
+
+        Azure Firewall was successfully deployed and became operational within
+        the Azure Virtual Network. The environment was now ready for the next
+        phase of the implementation, where User Defined Routes (UDRs) would be
+        configured to force network traffic through the firewall for inspection.
+
+    </p>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- STEP 3 STARTS BELOW -->
+
+<!-- ========================================= -->
+<!-- STEP 3 -->
+<!-- ========================================= -->
+
+<section>
+
+    <h2>Step 3 – Configure User Defined Routes (UDRs)</h2>
+
+    <h3>Objective</h3>
+
+    <p>
+
+        After deploying Azure Firewall, the next step was to configure
+        <strong>User Defined Routes (UDRs)</strong>. By default, Azure routes
+        traffic directly between resources and the Internet. To ensure that
+        every outbound connection is inspected by Azure Firewall, custom route
+        tables were created and associated with the workload subnet.
+
+    </p>
+
+    <h3>Configuration Process</h3>
+
+    <p>
+
+        A Route Table was created within the Azure Resource Group and configured
+        with a custom route that directed outbound traffic to the Azure Firewall
+        private IP address. The Route Table was then associated with the
+        workload subnet, ensuring that all virtual machines in the subnet used
+        the firewall as their next hop for Internet-bound traffic.
+
+    </p>
+
+    <img
+    src="../assets/img/cloud-security/azure-firewall/task3-udr-creation.png"
+    alt="User Defined Route Configuration"
+    class="project-image">
+
+    <p class="image-caption">
+
+        <strong>Figure 4.</strong> Creating a User Defined Route (UDR) to
+        redirect outbound traffic through Azure Firewall.
+
+    </p>
+
+    <h3>Route Configuration</h3>
+
+    <table class="project-table">
+
+        <tr>
+            <th>Setting</th>
+            <th>Value</th>
+        </tr>
+
+        <tr>
+            <td>Route Type</td>
+            <td>User Defined Route (UDR)</td>
+        </tr>
+
+        <tr>
+            <td>Destination</td>
+            <td>0.0.0.0/0 (Default Route)</td>
+        </tr>
+
+        <tr>
+            <td>Next Hop Type</td>
+            <td>Virtual Appliance</td>
+        </tr>
+
+        <tr>
+            <td>Next Hop Address</td>
+            <td>Azure Firewall Private IP Address</td>
+        </tr>
+
+    </table>
+
+    <h3>Route Table Association</h3>
+
+    <p>
+
+        Once the custom route was created, the Route Table was associated with
+        the workload subnet. This ensured that every virtual machine within the
+        subnet automatically forwarded outbound traffic through Azure Firewall
+        before accessing external resources.
+
+    </p>
+
+    <img
+    src="../assets/img/cloud-security/azure-firewall/task3-route-table-association.png"
+    alt="Route Table Association"
+    class="project-image">
+
+    <p class="image-caption">
+
+        <strong>Figure 5.</strong> Associating the Route Table with the Azure
+        workload subnet.
+
+    </p>
+
+    <h3>Security Benefits</h3>
+
+    <div class="info-box">
+
+        <ul>
+
+            <li>Forces all outbound traffic through Azure Firewall.</li>
+
+            <li>Prevents workloads from bypassing centralized inspection.</li>
+
+            <li>Enables consistent enforcement of firewall policies.</li>
+
+            <li>Improves visibility into network communications.</li>
+
+            <li>Supports Zero Trust networking principles.</li>
+
+            <li>Strengthens network segmentation within Azure.</li>
+
+        </ul>
+
+    </div>
+
+    <h3>Why This Step Matters</h3>
+
+    <p>
+
+        Azure Firewall can only inspect traffic that reaches it. Without User
+        Defined Routes, workloads could communicate directly with the Internet,
+        bypassing firewall policies entirely. Configuring UDRs ensures that all
+        outbound traffic follows a controlled path through Azure Firewall,
+        allowing administrators to enforce security policies, monitor activity,
+        and reduce the organization's attack surface.
+
+    </p>
+
+    <h3>Outcome</h3>
+
+    <p>
+
+        The User Defined Routes were successfully configured and associated with
+        the workload subnet. All outbound traffic was now routed through Azure
+        Firewall, preparing the environment for the creation of Application
+        Rules that would control access to specific web services and domains.
+
+    </p>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- STEP 4 STARTS BELOW -->
+
+
+
+<!-- ========================================= -->
+<!-- STEP 4 -->
+<!-- ========================================= -->
+
+<section>
+
+    <h2>Step 4 – Configure Application Rules</h2>
+
+    <h3>Objective</h3>
+
+    <p>
+
+        With Azure Firewall successfully deployed and all outbound traffic
+        redirected through it, the next step was to configure
+        <strong>Application Rules</strong>. These rules operate at Layer 7
+        (Application Layer) and allow administrators to control outbound web
+        traffic based on Fully Qualified Domain Names (FQDNs) instead of IP
+        addresses.
+
+    </p>
+
+    <h3>Configuration Process</h3>
+
+    <p>
+
+        An Application Rule Collection was created within Azure Firewall Policy.
+        Specific domains required by the lab environment were added as allowed
+        destinations while all other web traffic continued to be evaluated
+        against the configured firewall policy. This approach demonstrates how
+        Azure Firewall can enforce web access restrictions using domain names
+        rather than relying solely on IP-based filtering.
+
+    </p>
+
+    <img
+    src="../assets/img/cloud-security/azure-firewall/task4-application-rules.png"
+    alt="Azure Firewall Application Rules"
+    class="project-image">
+
+    <p class="image-caption">
+
+        <strong>Figure 6.</strong> Configuring Azure Firewall Application Rules
+        to allow traffic only to approved web destinations.
+
+    </p>
+
+    <h3>Application Rule Configuration</h3>
+
+    <table class="project-table">
+
+        <tr>
+            <th>Setting</th>
+            <th>Configuration</th>
+        </tr>
+
+        <tr>
+            <td>Rule Collection</td>
+            <td>Application Rule Collection</td>
+        </tr>
+
+        <tr>
+            <td>Rule Type</td>
+            <td>Allow</td>
+        </tr>
+
+        <tr>
+            <td>Protocol</td>
+            <td>HTTP / HTTPS</td>
+        </tr>
+
+        <tr>
+            <td>Target</td>
+            <td>Approved Fully Qualified Domain Names (FQDNs)</td>
+        </tr>
+
+        <tr>
+            <td>Source</td>
+            <td>Protected Azure Workload Subnet</td>
+        </tr>
+
+    </table>
+
+    <h3>Why Application Rules?</h3>
+
+    <p>
+
+        Traditional firewalls often rely on IP addresses to filter traffic.
+        However, cloud services frequently change IP addresses, making IP-based
+        filtering difficult to maintain. Azure Firewall Application Rules solve
+        this problem by filtering traffic based on domain names, allowing
+        organizations to securely permit access to trusted services such as
+        Microsoft, GitHub, or other approved business applications.
+
+    </p>
+
+    <div class="info-box">
+
+        <h3>Security Benefits</h3>
+
+        <ul>
+
+            <li>Layer 7 filtering using Fully Qualified Domain Names (FQDNs).</li>
+
+            <li>Improves control over outbound web traffic.</li>
+
+            <li>Supports least privilege Internet access.</li>
+
+            <li>Reduces exposure to unauthorized websites.</li>
+
+            <li>Simplifies firewall policy management for cloud services.</li>
+
+            <li>Provides centralized governance of Internet connectivity.</li>
+
+        </ul>
+
+    </div>
+
+    <h3>Real-World Business Value</h3>
+
+    <p>
+
+        In enterprise environments, Application Rules help security teams
+        restrict employee and server access to only approved cloud services.
+        Rather than allowing unrestricted Internet connectivity, organizations
+        can define a list of trusted domains that align with business
+        requirements, reducing the risk of malware downloads, data exfiltration,
+        and communication with malicious websites.
+
+    </p>
+
+    <h3>Outcome</h3>
+
+    <p>
+
+        Application Rules were successfully configured, enabling Azure Firewall
+        to inspect and control outbound web traffic based on approved domain
+        names. This strengthened the organization's network security posture and
+        prepared the environment for the implementation of Layer 3 and Layer 4
+        Network Rules in the next phase of the project.
+
+    </p>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- STEP 5 STARTS BELOW -->
+
+<!-- ========================================= -->
+<!-- STEP 5 -->
+<!-- ========================================= -->
+
+<section>
+
+    <h2>Step 5 – Configure Network Rules</h2>
+
+    <h3>Objective</h3>
+
+    <p>
+
+        After configuring Application Rules for Layer 7 traffic, the next stage
+        involved creating <strong>Network Rules</strong>. Network Rules operate
+        at Layers 3 and 4 of the OSI model and allow Azure Firewall to filter
+        traffic based on source IP addresses, destination IP addresses,
+        protocols, and port numbers. These rules provide fine-grained control
+        over network communications between Azure resources and external
+        networks.
+
+    </p>
+
+    <h3>Configuration Process</h3>
+
+    <p>
+
+        A Network Rule Collection was created within Azure Firewall to define
+        which network connections were permitted. Rules were configured to allow
+        only specific protocols and destination ports required for business
+        operations while denying unnecessary or unauthorized traffic. This
+        approach follows the principle of least privilege by allowing only the
+        minimum network access required.
+
+    </p>
+
+    <img
+    src="../assets/img/cloud-security/azure-firewall/task5-network-rules.png"
+    alt="Azure Firewall Network Rules"
+    class="project-image">
+
+    <p class="image-caption">
+
+        <strong>Figure 7.</strong> Configuring Azure Firewall Network Rules to
+        control traffic based on IP addresses, protocols, and ports.
+
+    </p>
+
+    <h3>Network Rule Configuration</h3>
+
+    <table class="project-table">
+
+        <tr>
+            <th>Setting</th>
+            <th>Configuration</th>
+        </tr>
+
+        <tr>
+            <td>Rule Collection</td>
+            <td>Network Rule Collection</td>
+        </tr>
+
+        <tr>
+            <td>Source</td>
+            <td>Protected Azure Subnet</td>
+        </tr>
+
+        <tr>
+            <td>Destination</td>
+            <td>Approved IP Addresses or Networks</td>
+        </tr>
+
+        <tr>
+            <td>Protocols</td>
+            <td>TCP / UDP</td>
+        </tr>
+
+        <tr>
+            <td>Destination Ports</td>
+            <td>Business-required service ports</td>
+        </tr>
+
+        <tr>
+            <td>Action</td>
+            <td>Allow</td>
+        </tr>
+
+    </table>
+
+    <h3>Why Network Rules Matter</h3>
+
+    <p>
+
+        While Application Rules secure web traffic using domain names, many
+        enterprise services communicate directly using IP addresses and specific
+        network ports. Network Rules provide the ability to inspect and control
+        these communications, ensuring that only authorized connections are
+        established between systems.
+
+    </p>
+
+    <div class="info-box">
+
+        <h3>Security Benefits</h3>
+
+        <ul>
+
+            <li>Filters traffic at Layers 3 and 4 of the OSI model.</li>
+
+            <li>Controls communication using IP addresses and port numbers.</li>
+
+            <li>Supports the Principle of Least Privilege.</li>
+
+            <li>Blocks unauthorized network connections.</li>
+
+            <li>Reduces the attack surface of Azure workloads.</li>
+
+            <li>Provides centralized enforcement of network access policies.</li>
+
+        </ul>
+
+    </div>
+
+    <h3>Real-World Business Value</h3>
+
+    <p>
+
+        Organizations frequently use Network Rules to restrict communication
+        between production, development, and management environments. By
+        allowing only approved network paths and service ports, security teams
+        reduce the risk of lateral movement, unauthorized access, and exposure
+        of sensitive systems to unnecessary network traffic.
+
+    </p>
+
+    <h3>Outcome</h3>
+
+    <p>
+
+        Azure Firewall Network Rules were successfully configured to control
+        network communications based on IP addresses, protocols, and ports.
+        Together with the previously configured Application Rules, the firewall
+        now enforced both Layer 7 and Layer 3/4 security controls. The
+        environment was ready for DNS Proxy configuration and final validation
+        testing.
+
+    </p>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- STEP 6 STARTS BELOW -->
+
+<!-- ========================================= -->
+<!-- STEP 6 -->
+<!-- ========================================= -->
+
+<section>
+
+    <h2>Step 6 – Configure DNS Proxy</h2>
+
+    <h3>Objective</h3>
+
+    <p>
+
+        The final configuration task was to enable <strong>DNS Proxy</strong>
+        within Azure Firewall. DNS Proxy allows Azure Firewall to receive and
+        forward Domain Name System (DNS) requests on behalf of client
+        workloads. This ensures consistent name resolution while allowing
+        Application Rules based on Fully Qualified Domain Names (FQDNs) to
+        function correctly.
+
+    </p>
+
+    <h3>Configuration Process</h3>
+
+    <p>
+
+        DNS Proxy was enabled within the Azure Firewall settings, allowing the
+        firewall to process DNS queries before forwarding them to the configured
+        DNS server. Client virtual machines were then configured to use the
+        firewall's private IP address as their DNS server, ensuring all DNS
+        requests passed through Azure Firewall.
+
+    </p>
+
+    <img
+    src="../assets/img/cloud-security/azure-firewall/task6-dns-settings.png"
+    alt="Azure Firewall DNS Proxy Configuration"
+    class="project-image">
+
+    <p class="image-caption">
+
+        <strong>Figure 8.</strong> Enabling DNS Proxy and configuring Azure
+        Firewall to centrally manage DNS resolution.
+
+    </p>
+
+    <h3>Configuration Summary</h3>
+
+    <table class="project-table">
+
+        <tr>
+            <th>Setting</th>
+            <th>Configuration</th>
+        </tr>
+
+        <tr>
+            <td>Feature</td>
+            <td>DNS Proxy Enabled</td>
+        </tr>
+
+        <tr>
+            <td>Client DNS Server</td>
+            <td>Azure Firewall Private IP Address</td>
+        </tr>
+
+        <tr>
+            <td>DNS Resolution</td>
+            <td>Processed through Azure Firewall</td>
+        </tr>
+
+        <tr>
+            <td>Purpose</td>
+            <td>Support FQDN-based Application Rules and centralized DNS management</td>
+        </tr>
+
+    </table>
+
+    <h3>Why DNS Proxy Matters</h3>
+
+    <p>
+
+        Azure Firewall Application Rules depend on accurate domain name
+        resolution. Without DNS Proxy, client systems may resolve domain names
+        independently, reducing the effectiveness of firewall policies. By
+        centralizing DNS resolution, organizations improve policy consistency,
+        simplify troubleshooting, and gain greater visibility into DNS-related
+        network activity.
+
+    </p>
+
+    <div class="info-box">
+
+        <h3>Security Benefits</h3>
+
+        <ul>
+
+            <li>Centralizes DNS resolution for Azure workloads.</li>
+
+            <li>Supports reliable enforcement of FQDN-based Application Rules.</li>
+
+            <li>Improves visibility into DNS requests.</li>
+
+            <li>Simplifies DNS policy management across cloud environments.</li>
+
+            <li>Helps detect suspicious or unauthorized DNS activity.</li>
+
+            <li>Strengthens overall network governance.</li>
+
+        </ul>
+
+    </div>
+
+    <h3>Real-World Business Value</h3>
+
+    <p>
+
+        In enterprise cloud environments, centralized DNS resolution helps
+        security teams maintain consistent security policies across hundreds or
+        thousands of workloads. It also improves incident investigations by
+        providing a single point for monitoring DNS activity and identifying
+        potentially malicious domain lookups.
+
+    </p>
+
+    <h3>Outcome</h3>
+
+    <p>
+
+        DNS Proxy was successfully enabled, allowing Azure Firewall to manage
+        DNS resolution for protected workloads. With routing, application
+        filtering, network filtering, and DNS services fully configured, the
+        Azure Firewall environment was ready for validation testing to confirm
+        that security policies were functioning as expected.
+
+    </p>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- STEP 7 STARTS BELOW -->
+
+<!-- ========================================= -->
+<!-- STEP 7 -->
+<!-- ========================================= -->
+
+<section>
+
+    <h2>Step 7 – Validate Firewall Configuration</h2>
+
+    <h3>Objective</h3>
+
+    <p>
+
+        The final phase of the project involved validating the Azure Firewall
+        configuration to confirm that the implemented security policies were
+        functioning correctly. Connectivity tests were performed to verify that
+        authorized traffic was successfully permitted while unauthorized traffic
+        was blocked according to the configured Application Rules and Network
+        Rules.
+
+    </p>
+
+    <h3>Validation Methodology</h3>
+
+    <p>
+
+        Test virtual machines within the protected Azure Virtual Network were
+        used to generate outbound network traffic. Multiple connectivity tests
+        were performed against approved and restricted destinations to verify
+        that Azure Firewall correctly enforced the configured security policies.
+
+    </p>
+
+    <hr>
+
+    <h3>Validation Test 1 – Allowed Traffic</h3>
+
+    <p>
+
+        The first validation test confirmed that traffic matching the configured
+        firewall policies was successfully permitted. The test demonstrated that
+        legitimate business communication could pass through Azure Firewall
+        without interruption while still being inspected by the firewall.
+
+    </p>
+
+    <img
+    src="../assets/img/cloud-security/azure-firewall/task7-allowed-traffic-test.png"
+    alt="Allowed Traffic Validation"
+    class="project-image">
+
+    <p class="image-caption">
+
+        <strong>Figure 9.</strong> Successful connectivity test showing Azure
+        Firewall allowing authorized outbound traffic.
+
+    </p>
+
+    <h4>Result</h4>
+
+    <ul>
+
+        <li>Firewall policies successfully evaluated the connection.</li>
+
+        <li>Approved traffic was allowed.</li>
+
+        <li>Traffic inspection occurred before Internet access.</li>
+
+        <li>Expected firewall behavior confirmed.</li>
+
+    </ul>
+
+    <hr>
+
+    <h3>Validation Test 2 – Blocked Traffic</h3>
+
+    <p>
+
+        The second validation test attempted to access resources that were not
+        explicitly permitted by the configured firewall policies. Azure Firewall
+        correctly denied the connection, demonstrating effective enforcement of
+        centralized security controls.
+
+    </p>
+
+    <img
+    src="../assets/img/cloud-security/azure-firewall/task7-blocked-traffic-test.png"
+    alt="Blocked Traffic Validation"
+    class="project-image">
+
+    <p class="image-caption">
+
+        <strong>Figure 10.</strong> Azure Firewall successfully blocking
+        unauthorized outbound traffic based on configured security policies.
+
+    </p>
+
+    <h4>Result</h4>
+
+    <ul>
+
+        <li>Unauthorized traffic was denied.</li>
+
+        <li>Firewall policy enforcement operated as expected.</li>
+
+        <li>Only approved network communications were permitted.</li>
+
+        <li>Centralized traffic inspection successfully protected Azure workloads.</li>
+
+    </ul>
+
+    <h3>Overall Validation Results</h3>
+
+    <table class="project-table">
+
+        <tr>
+            <th>Security Control</th>
+            <th>Status</th>
+            <th>Result</th>
+        </tr>
+
+        <tr>
+            <td>Azure Firewall Deployment</td>
+            <td>✔ Successful</td>
+            <td>Firewall operational.</td>
+        </tr>
+
+        <tr>
+            <td>User Defined Routes</td>
+            <td>✔ Successful</td>
+            <td>Traffic redirected through firewall.</td>
+        </tr>
+
+        <tr>
+            <td>Application Rules</td>
+            <td>✔ Successful</td>
+            <td>Approved domains accessible.</td>
+        </tr>
+
+        <tr>
+            <td>Network Rules</td>
+            <td>✔ Successful</td>
+            <td>Authorized network traffic permitted.</td>
+        </tr>
+
+        <tr>
+            <td>DNS Proxy</td>
+            <td>✔ Successful</td>
+            <td>Centralized DNS resolution functioning.</td>
+        </tr>
+
+        <tr>
+            <td>Firewall Validation</td>
+            <td>✔ Successful</td>
+            <td>Security policies enforced correctly.</td>
+        </tr>
+
+    </table>
+
+    <div class="info-box">
+
+        <h3>Project Outcome</h3>
+
+        <p>
+
+            The Azure Firewall deployment and configuration were successfully
+            completed. Validation testing confirmed that Azure Firewall
+            effectively inspected, filtered, and controlled network traffic
+            according to the implemented security policies. The environment now
+            follows Azure networking best practices by centralizing traffic
+            inspection, reducing the attack surface, and improving overall cloud
+            security governance.
+
+        </p>
+
+    </div>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- SECURITY CONTROLS IMPLEMENTED -->
+<!-- ========================================= -->
+
+
+<section>
+
+    <h2>Security Controls Implemented</h2>
+
+    <p>
+
+        Throughout this project, multiple Azure security controls were
+        implemented to establish a secure, centrally managed network security
+        architecture. These controls work together to inspect, filter, and
+        monitor network traffic while reducing the attack surface of Azure
+        workloads.
+
+    </p>
+
+    <table class="project-table">
+
+        <tr>
+            <th>Security Control</th>
+            <th>Purpose</th>
+            <th>Status</th>
+        </tr>
+
+        <tr>
+            <td>Azure Firewall</td>
+            <td>Centralized inspection of inbound and outbound traffic.</td>
+            <td>✔ Implemented</td>
+        </tr>
+
+        <tr>
+            <td>User Defined Routes (UDRs)</td>
+            <td>Force outbound traffic through Azure Firewall.</td>
+            <td>✔ Implemented</td>
+        </tr>
+
+        <tr>
+            <td>Application Rules</td>
+            <td>Allow or deny traffic using approved domain names (FQDNs).</td>
+            <td>✔ Implemented</td>
+        </tr>
+
+        <tr>
+            <td>Network Rules</td>
+            <td>Filter traffic using IP addresses, protocols, and ports.</td>
+            <td>✔ Implemented</td>
+        </tr>
+
+        <tr>
+            <td>DNS Proxy</td>
+            <td>Centralize DNS resolution and support FQDN filtering.</td>
+            <td>✔ Implemented</td>
+        </tr>
+
+    </table>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- CHALLENGES ENCOUNTERED -->
+<!-- ========================================= -->
+
+<section>
+
+    <h2>Challenges Encountered</h2>
+
+    <p>
+
+        During implementation, several technical considerations had to be
+        addressed to ensure Azure Firewall functioned correctly. These
+        challenges reflect common deployment scenarios encountered in enterprise
+        Azure environments.
+
+    </p>
+
+    <table class="project-table">
+
+        <tr>
+            <th>Challenge</th>
+            <th>Resolution</th>
+        </tr>
+
+        <tr>
+            <td>Azure Firewall requires a dedicated AzureFirewallSubnet.</td>
+            <td>Verified subnet naming and deployment requirements before provisioning.</td>
+        </tr>
+
+        <tr>
+            <td>Traffic initially bypassed the firewall.</td>
+            <td>Configured User Defined Routes to force traffic through Azure Firewall.</td>
+        </tr>
+
+        <tr>
+            <td>Application Rules depend on proper DNS resolution.</td>
+            <td>Enabled DNS Proxy and configured clients to use the firewall for DNS.</td>
+        </tr>
+
+        <tr>
+            <td>Policy validation required testing both permitted and blocked traffic.</td>
+            <td>Performed connectivity tests to confirm firewall rule enforcement.</td>
+        </tr>
+
+    </table>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- SKILLS DEMONSTRATED -->
+<!-- ========================================= -->
+
+<section>
+
+    <h2>Skills Demonstrated</h2>
+
+    <p>
+
+        This project demonstrates practical cloud security and Azure networking
+        skills applicable to real-world enterprise environments.
+
+    </p>
+
+    <ul>
+
+        <li>Microsoft Azure Administration</li>
+
+        <li>Azure Firewall Deployment</li>
+
+        <li>Azure Virtual Networking</li>
+
+        <li>User Defined Route (UDR) Configuration</li>
+
+        <li>Application Rule Management</li>
+
+        <li>Network Rule Configuration</li>
+
+        <li>DNS Proxy Configuration</li>
+
+        <li>Cloud Network Security</li>
+
+        <li>Traffic Inspection & Filtering</li>
+
+        <li>Infrastructure as Code (ARM Templates)</li>
+
+        <li>Security Validation & Testing</li>
+
+        <li>Technical Documentation</li>
+
+    </ul>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- LESSONS LEARNED -->
+<!-- ========================================= -->
+
+<section>
+
+    <h2>Lessons Learned</h2>
+
+    <p>
+
+        This project reinforced the importance of centralized network security
+        within cloud environments. Deploying Azure Firewall alone is not
+        sufficient; traffic must be intentionally routed through the firewall
+        using User Defined Routes to ensure inspection and policy enforcement.
+
+    </p>
+
+    <p>
+
+        The implementation also demonstrated how multiple security controls
+        work together to provide defense in depth. Application Rules, Network
+        Rules, and DNS Proxy each address different aspects of network security,
+        creating a layered approach that aligns with Microsoft's Zero Trust
+        architecture principles.
+
+    </p>
+
+    <p>
+
+        Finally, validation testing highlighted the importance of confirming
+        that security controls operate as intended. Successful deployment is
+        only one part of the process—continuous verification ensures that
+        security policies effectively protect cloud workloads.
+
+    </p>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- REFERENCES -->
+<!-- ========================================= -->
+
+<section>
+
+    <h2>References</h2>
+
+    <ul>
+
+        <li>Microsoft Learn – Secure your virtual hub using Azure Firewall Manager</li>
+
+        <li>Microsoft Learn – Introduction to Azure Firewall</li>
+
+        <li>Microsoft Learn – Azure Networking Fundamentals</li>
+
+        <li>Azure Firewall Documentation</li>
+
+        <li>Azure Well-Architected Framework</li>
+
+        <li>Microsoft Cloud Adoption Framework</li>
+
+    </ul>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- RELATED PROJECTS -->
+<!-- ========================================= -->
+
+<section>
+
+    <h2>Related Cloud Security Projects</h2>
+
+    <ul>
+
+        <li><a href="rbac-security.html">Azure Role-Based Access Control (RBAC)</a></li>
+
+        <li><a href="storage-security.html">Azure Storage Security</a></li>
+
+        <li><a href="network-segmentation.html">Azure Network Segmentation</a></li>
+
+        <li><a href="aks-security.html">AKS & Azure Container Registry Security</a></li>
+
+    </ul>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- PROJECT SUMMARY -->
+<!-- ========================================= -->
+
+<section>
+
+    <h2>Project Summary</h2>
+
+    <p>
+
+        This project demonstrates the end-to-end deployment and configuration
+        of Azure Firewall within a Microsoft Azure environment. The
+        implementation covered infrastructure deployment, secure routing,
+        firewall policy creation, DNS configuration, and validation testing to
+        establish a centralized cloud network security architecture.
+
+    </p>
+
+    <p>
+
+        By combining Azure Firewall with User Defined Routes, Application
+        Rules, Network Rules, and DNS Proxy, the environment achieved improved
+        visibility, stronger policy enforcement, and better protection against
+        unauthorized network communications. The project reflects practical
+        skills in cloud security engineering and demonstrates an understanding
+        of enterprise Azure networking best practices.
+
+    </p>
+
+</section>
+
+    </div>
+
+</body>
+</html>

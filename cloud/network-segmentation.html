@@ -1,12 +1,17 @@
-
 <!DOCTYPE html>
-
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<title>Network Segmentation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Azure Network Segmentation</title>
+
 <link rel="stylesheet" href="../assets/css/style.css">
+
 </head>
+
 <body>
 
 <nav>
@@ -20,42 +25,1420 @@
 
 <div class="container">
 
-<h1>Designing Segmented Cloud Networks Using NSGs and ASGs</h1>
+<h1>Azure Network Segmentation Using Network Security Groups (NSGs) and Application Security Groups (ASGs)</h1>
 
-<h2>Overview</h2>
+<h2>Project Overview</h2>
+
 <p>
-Implemented Azure Network Security Groups and Application Security Groups
-to control traffic flows between workloads.
+
+This project demonstrates how Microsoft Azure Network Security Groups (NSGs)
+and Application Security Groups (ASGs) can be combined to implement secure
+network segmentation for enterprise cloud environments. By separating workloads
+into logical security groups and enforcing role-based traffic policies, the
+solution limits unnecessary communication, reduces the attack surface, and
+supports Zero Trust networking principles.
+
 </p>
 
-<h2>Business Problem</h2>
+<h2>Business Scenario</h2>
+
 <p>
-Flat networks increase lateral movement opportunities during compromise.
+
+A fictional organization hosts both public-facing web servers and internal
+management servers within Azure. Because each workload performs different
+business functions, they require different network security policies. Web
+servers should only receive HTTP traffic from users, while management servers
+should only accept Remote Desktop (RDP) connections from authorized
+administrators. The objective is to implement secure network segmentation that
+prevents unauthorized access while maintaining operational efficiency.
+
 </p>
 
-<h2>Objectives</h2>
+<h2>Security Objectives</h2>
+
 <ul>
-<li>Deploy NSGs</li>
-<li>Configure ASGs</li>
-<li>Restrict traffic paths</li>
-<li>Validate segmentation</li>
+
+<li>Deploy Azure Virtual Network infrastructure.</li>
+
+<li>Create Application Security Groups for workload segmentation.</li>
+
+<li>Deploy separate Web and Management virtual machines.</li>
+
+<li>Configure Network Security Groups with role-based security rules.</li>
+
+<li>Restrict traffic using Application Security Groups.</li>
+
+<li>Validate network segmentation using Azure Network Watcher.</li>
+
+<li>Demonstrate defense-in-depth using Azure native networking services.</li>
+
 </ul>
 
-<h2>Security Outcome</h2>
-<ul>
-<li>Reduced lateral movement risk</li>
-<li>Improved segmentation</li>
-<li>Enhanced visibility of traffic flows</li>
-</ul>
+<hr>
 
-<h2>Skills Demonstrated</h2>
+<h2>Solution Architecture</h2>
+
+<img
+src="../assets/img/cloud-security/network-segmentation/architecture.png"
+alt="Azure Network Segmentation Architecture"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 1.</strong>
+Azure network segmentation architecture using Virtual Networks, Application
+Security Groups, Network Security Groups, and role-based traffic filtering.
+
+</p>
+
+<p>
+
+The architecture separates Azure virtual machines into logical security groups
+using Application Security Groups while Network Security Groups enforce
+different inbound access policies for web and management workloads. This
+approach simplifies rule management while strengthening network security and
+limiting lateral movement between workloads.
+
+</p>
+
+<hr>
+
+<h2>Azure Services Used</h2>
+
+<table class="project-table">
+
+<tr>
+<th>Azure Service</th>
+<th>Security Purpose</th>
+</tr>
+
+<tr>
+<td>Azure Virtual Network</td>
+<td>Provides private network isolation for cloud workloads.</td>
+</tr>
+
+<tr>
+<td>Application Security Groups</td>
+<td>Logically groups workloads for simplified security policy management.</td>
+</tr>
+
+<tr>
+<td>Network Security Groups</td>
+<td>Filters inbound and outbound network traffic.</td>
+</tr>
+
+<tr>
+<td>Azure Virtual Machines</td>
+<td>Represents Web and Management server workloads.</td>
+</tr>
+
+<tr>
+<td>Azure Network Watcher</td>
+<td>Validates network connectivity and security rule enforcement.</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Security Risks Addressed</h2>
+
+<table class="project-table">
+
+<tr>
+<th>Security Risk</th>
+<th>Mitigation</th>
+</tr>
+
+<tr>
+<td>Unauthorized administrative access</td>
+<td>Restrict RDP access using NSGs and ASGs.</td>
+</tr>
+
+<tr>
+<td>Excessive network exposure</td>
+<td>Allow only required application traffic.</td>
+</tr>
+
+<tr>
+<td>Lateral movement</td>
+<td>Separate workloads using logical network segmentation.</td>
+</tr>
+
+<tr>
+<td>Misconfigured firewall rules</td>
+<td>Manage policies through Application Security Groups.</td>
+</tr>
+
+<tr>
+<td>Unvalidated security controls</td>
+<td>Verify rule enforcement using Azure Network Watcher.</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Implementation Overview</h2>
+
+<p>
+
+The following implementation phases demonstrate the complete deployment of a
+segmented Azure network using Virtual Networks, Application Security Groups,
+Network Security Groups, Virtual Machines, and Azure Network Watcher. Each
+phase includes configuration details, screenshots, validation results, and the
+security benefits gained from the implementation.
+
+</p>
+
+<hr>
+
+
+
+<!-- ========================================= -->
+<!-- IMPLEMENTATION PHASE 1 STARTS BELOW -->
+<!-- ========================================= -->
+
+<!-- Phase 1 -->
+
+
+<section>
+
+<h2>Implementation Phase 1 – Create the Resource Group and Azure Virtual Network</h2>
+
+<h3>Objective</h3>
+
+<p>
+
+The first phase established the foundational Azure infrastructure required for
+network segmentation. A dedicated Resource Group and Azure Virtual Network
+(VNet) were created to provide a secure, isolated environment where networking
+resources could be centrally managed. This infrastructure serves as the basis
+for deploying virtual machines, configuring Application Security Groups (ASGs),
+and enforcing Network Security Group (NSG) policies throughout the project.
+
+</p>
+
+<h3>Implementation</h3>
+
+<p>
+
+A new Resource Group named <strong>RG-SecurityLab</strong> was created within
+the selected Azure region to logically organize all project resources.
+Following this, an Azure Virtual Network named
+<strong>VNet-SecurityLab</strong> was deployed with dedicated subnets to host
+the Web Server and Management Server workloads. This logical separation forms
+the foundation of secure network segmentation.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/network-segmentation/task1-resource-group.png"
+alt="Azure Resource Group Creation"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 2.</strong>
+Creation of the Resource Group used to centrally manage all Azure networking
+resources for this project.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/network-segmentation/task1-virtual-network.png"
+alt="Azure Virtual Network Deployment"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 3.</strong>
+Deployment of the Azure Virtual Network providing isolated networking for Web
+and Management server workloads.
+
+</p>
+
+<h3>Infrastructure Configuration</h3>
+
+<table class="project-table">
+
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>Resource Group</td>
+<td>Provides centralized management of Azure resources.</td>
+</tr>
+
+<tr>
+<td>Azure Virtual Network</td>
+<td>Creates an isolated private network for workloads.</td>
+</tr>
+
+<tr>
+<td>Dedicated Subnets</td>
+<td>Separate Web Server and Management Server traffic.</td>
+</tr>
+
+<tr>
+<td>Azure Region</td>
+<td>Hosts all networking resources within the same location.</td>
+</tr>
+
+</table>
+
+<h3>Why This Phase Matters</h3>
+
+<p>
+
+Every secure Azure deployment begins with a properly designed networking
+foundation. By organizing resources into a dedicated Resource Group and
+isolating workloads inside an Azure Virtual Network, administrators gain
+centralized management, improved visibility, and a controlled environment where
+security policies can be consistently enforced.
+
+</p>
+
+<div class="info-box">
+
+<h3>Security Benefits</h3>
+
 <ul>
-<li>NSGs</li>
-<li>ASGs</li>
-<li>Azure Networking</li>
-<li>Traffic Filtering</li>
+
+<li>Creates logical isolation between cloud resources.</li>
+
+<li>Provides the foundation for network segmentation.</li>
+
+<li>Supports implementation of Network Security Groups.</li>
+
+<li>Enables secure communication between Azure workloads.</li>
+
+<li>Improves governance through centralized resource management.</li>
+
+<li>Reduces the attack surface by isolating enterprise workloads.</li>
+
 </ul>
 
 </div>
+
+<h3>Outcome</h3>
+
+<p>
+
+The Azure networking foundation was successfully deployed. The Resource Group
+and Virtual Network now provide the secure infrastructure required for
+implementing Application Security Groups, deploying virtual machines, and
+enforcing role-based network security policies in the following phases.
+
+</p>
+
+</section>
+
+<hr>
+
+
+
+<!-- ========================================= -->
+<!-- IMPLEMENTATION PHASE 2 STARTS BELOW -->
+<!-- ========================================= -->
+
+<!-- Phase 2 -->
+
+<section>
+
+<h2>Implementation Phase 2 – Create Application Security Groups (ASGs)</h2>
+
+<h3>Objective</h3>
+
+<p>
+
+With the Azure networking infrastructure in place, the next phase focused on
+creating Application Security Groups (ASGs). Unlike traditional IP-based
+security rules, ASGs allow Azure administrators to logically group virtual
+machines according to their business function. This simplifies Network Security
+Group (NSG) management while improving scalability, readability, and
+maintainability of security policies.
+
+</p>
+
+<h3>Implementation</h3>
+
+<p>
+
+Two Application Security Groups were created to represent the different
+workloads within the environment. The first ASG,
+<strong>ASG-Web</strong>, was designated for public-facing web servers,
+while the second,
+<strong>ASG-Management</strong>, was created for administrative management
+servers. These logical groups would later be referenced by Network Security
+Group rules instead of individual IP addresses.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/network-segmentation/task2-asg-web.png"
+alt="Application Security Group for Web Servers"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 4.</strong>
+Creation of the Application Security Group used to logically group Azure Web
+Server virtual machines.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/network-segmentation/task2-asg-management.png"
+alt="Application Security Group for Management Servers"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 5.</strong>
+Application Security Group created for Management Server workloads requiring
+administrative access.
+
+</p>
+
+<h3>Application Security Groups Created</h3>
+
+<table class="project-table">
+
+<tr>
+<th>Application Security Group</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>ASG-Web</td>
+<td>Groups public-facing web servers for HTTP traffic policies.</td>
+</tr>
+
+<tr>
+<td>ASG-Management</td>
+<td>Groups management servers requiring secure administrative access.</td>
+</tr>
+
+</table>
+
+<h3>Why This Phase Matters</h3>
+
+<p>
+
+Managing firewall rules based on IP addresses quickly becomes difficult in
+large cloud environments where virtual machines are frequently added, removed,
+or reconfigured. Application Security Groups solve this problem by allowing
+security policies to target workload roles instead of individual machines,
+making network segmentation more flexible and significantly easier to manage.
+
+</p>
+
+<div class="info-box">
+
+<h3>Security Benefits</h3>
+
+<ul>
+
+<li>Groups virtual machines according to business function.</li>
+
+<li>Eliminates dependence on static IP addresses within security rules.</li>
+
+<li>Simplifies Network Security Group management.</li>
+
+<li>Supports scalable enterprise cloud environments.</li>
+
+<li>Improves consistency of role-based security policies.</li>
+
+<li>Strengthens Zero Trust network segmentation.</li>
+
+</ul>
+
+</div>
+
+<h3>Outcome</h3>
+
+<p>
+
+The Application Security Groups were successfully created to represent Web
+Server and Management Server workloads. These logical groups provide the
+foundation for applying role-based Network Security Group rules during the next
+implementation phases, enabling secure and scalable network segmentation.
+
+</p>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- IMPLEMENTATION PHASE 3 STARTS BELOW -->
+<!-- ========================================= -->
+
+<!-- Phase 3 -->
+
+
+<section>
+
+<h2>Implementation Phase 3 – Deploy Web and Management Virtual Machines</h2>
+
+<h3>Objective</h3>
+
+<p>
+
+After creating the Application Security Groups, the next phase involved
+deploying the workloads that would operate within the segmented Azure network.
+Two virtual machines were provisioned to simulate a real-world enterprise
+environment: a Web Server responsible for hosting public-facing services and a
+Management Server dedicated to administrative operations. Separating these
+roles enables independent security policies to be applied according to business
+requirements.
+
+</p>
+
+<h3>Implementation</h3>
+
+<p>
+
+A Web Server virtual machine was deployed with Internet Information Services
+(IIS) installed to provide HTTP services. A separate Management Server virtual
+machine was also deployed to support administrative tasks through Remote
+Desktop Protocol (RDP). Although both virtual machines reside within the same
+Azure Virtual Network, they perform different functions and will later receive
+different network security policies through Application Security Groups and
+Network Security Groups.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/network-segmentation/task3-web-vm-deployment.png"
+alt="Web Server Virtual Machine Deployment"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 6.</strong>
+Deployment of the Azure Web Server virtual machine configured to provide HTTP
+services for the segmented network.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/network-segmentation/task3-management-vm-deployment.png"
+alt="Management Server Virtual Machine Deployment"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 7.</strong>
+Deployment of the Azure Management Server virtual machine used for secure
+administrative access.
+
+</p>
+
+<h3>Virtual Machine Configuration</h3>
+
+<table class="project-table">
+
+<tr>
+<th>Virtual Machine</th>
+<th>Business Role</th>
+</tr>
+
+<tr>
+<td>Web Server VM</td>
+<td>Hosts public-facing web applications using IIS.</td>
+</tr>
+
+<tr>
+<td>Management Server VM</td>
+<td>Provides secure administrative management through RDP.</td>
+</tr>
+
+<tr>
+<td>Azure Virtual Network</td>
+<td>Provides isolated connectivity between both workloads.</td>
+</tr>
+
+<tr>
+<td>Application Security Groups</td>
+<td>Logical workload grouping for role-based security policies.</td>
+</tr>
+
+</table>
+
+<h3>Why This Phase Matters</h3>
+
+<p>
+
+Enterprise environments rarely apply identical security controls to every
+server. Public-facing application servers require different network access than
+administrative systems. By separating workloads according to their function,
+organizations can enforce least-privilege networking, reduce unnecessary
+exposure, and simplify security policy management across large cloud
+environments.
+
+</p>
+
+<div class="info-box">
+
+<h3>Security Benefits</h3>
+
+<ul>
+
+<li>Separates workloads according to business function.</li>
+
+<li>Supports implementation of role-based network policies.</li>
+
+<li>Reduces the attack surface through workload isolation.</li>
+
+<li>Prepares the environment for Application Security Group membership.</li>
+
+<li>Supports Zero Trust and least-privilege networking principles.</li>
+
+<li>Provides realistic enterprise infrastructure for security validation.</li>
+
+</ul>
+
+</div>
+
+<h3>Outcome</h3>
+
+<p>
+
+The Web Server and Management Server virtual machines were successfully
+deployed within the Azure Virtual Network. The environment now contains
+separate application workloads that are ready to be associated with
+Application Security Groups and protected through role-based Network Security
+Group policies.
+
+</p>
+
+</section>
+
+<hr>
+
+
+<!-- ========================================= -->
+<!-- IMPLEMENTATION PHASE 4 STARTS BELOW -->
+<!-- ========================================= -->
+
+<!-- Phase 4 -->
+
+<section>
+
+<h2>Implementation Phase 4 – Associate Virtual Machine Network Interfaces with Application Security Groups</h2>
+
+<h3>Objective</h3>
+
+<p>
+
+After deploying the Web Server and Management Server virtual machines, the next
+phase involved associating each virtual machine's Network Interface Card (NIC)
+with its corresponding Application Security Group (ASG). This enables Azure
+Network Security Groups to apply security policies based on application roles
+rather than individual IP addresses, creating a more scalable and manageable
+security architecture.
+
+</p>
+
+<h3>Implementation</h3>
+
+<p>
+
+The Network Interface Card (NIC) for the Web Server virtual machine was
+associated with <strong>ASG-Web</strong>, while the NIC for the Management
+Server virtual machine was associated with
+<strong>ASG-Management</strong>. Once these associations were completed,
+Network Security Group rules could reference the Application Security Groups
+directly, eliminating the need to configure firewall rules using individual
+virtual machine IP addresses.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/network-segmentation/task4-nic-association.png"
+alt="NIC Association with Application Security Groups"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 8.</strong>
+Virtual machine Network Interface Cards associated with their respective
+Application Security Groups to enable role-based security policy enforcement.
+
+</p>
+
+<h3>Application Security Group Associations</h3>
+
+<table class="project-table">
+
+<tr>
+<th>Virtual Machine</th>
+<th>Application Security Group</th>
+<th>Business Function</th>
+</tr>
+
+<tr>
+<td>Web Server VM</td>
+<td>ASG-Web</td>
+<td>Hosts public-facing web services.</td>
+</tr>
+
+<tr>
+<td>Management Server VM</td>
+<td>ASG-Management</td>
+<td>Provides secure administrative access.</td>
+</tr>
+
+</table>
+
+<h3>Why This Phase Matters</h3>
+
+<p>
+
+Application Security Groups separate security policy management from network
+addressing. Rather than creating firewall rules for individual virtual
+machines, administrators define rules for application roles. As workloads are
+added, removed, or replaced, security policies remain consistent without
+requiring updates to IP-based firewall rules. This significantly improves the
+scalability and maintainability of enterprise Azure environments.
+
+</p>
+
+<div class="info-box">
+
+<h3>Security Benefits</h3>
+
+<ul>
+
+<li>Implements role-based network security.</li>
+
+<li>Eliminates dependence on static IP addresses.</li>
+
+<li>Simplifies Network Security Group rule management.</li>
+
+<li>Supports dynamic cloud environments where workloads frequently change.</li>
+
+<li>Reduces administrative overhead for firewall policy management.</li>
+
+<li>Strengthens Zero Trust architecture through workload identity.</li>
+
+</ul>
+
+</div>
+
+<h3>Outcome</h3>
+
+<p>
+
+Both virtual machines were successfully associated with their respective
+Application Security Groups. The environment is now prepared for the next
+phase, where Network Security Groups will enforce different traffic rules for
+Web Server and Management Server workloads based on their ASG membership.
+
+</p>
+
+</section>
+
+<hr>
+
+
+
+<!-- ========================================= -->
+<!-- IMPLEMENTATION PHASE 5 STARTS BELOW -->
+<!-- ========================================= -->
+
+<!-- Phase 5 -->
+
+
+<section>
+
+<h2>Implementation Phase 5 – Configure Network Security Groups (NSGs)</h2>
+
+<h3>Objective</h3>
+
+<p>
+
+With the Azure infrastructure fully deployed and virtual machines assigned to
+their respective Application Security Groups, the next phase focused on
+configuring Network Security Groups (NSGs). NSGs provide stateful packet
+filtering for Azure resources and enforce inbound and outbound traffic rules.
+By combining NSGs with ASGs, security policies can be applied based on
+application roles rather than IP addresses, supporting scalable enterprise
+network segmentation.
+
+</p>
+
+<h3>Implementation</h3>
+
+<p>
+
+Separate Network Security Group rules were configured for the Web Server and
+Management Server workloads. The Web Server was permitted to receive HTTP
+traffic on TCP port 80, allowing users to access hosted web applications. The
+Management Server was configured to allow Remote Desktop Protocol (RDP) traffic
+on TCP port 3389 for authorized administrators. All other unnecessary inbound
+traffic remained blocked by default, following the principle of least
+privilege.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/network-segmentation/task5-web-nsg-rules.png"
+alt="Web Server Network Security Group Rules"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 9.</strong>
+Network Security Group configured to allow HTTP traffic for Web Server
+resources associated with the ASG-Web Application Security Group.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/network-segmentation/task5-management-nsg-rules.png"
+alt="Management Server Network Security Group Rules"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 10.</strong>
+Network Security Group configured to allow secure Remote Desktop (RDP)
+connections for Management Server resources associated with the
+ASG-Management Application Security Group.
+
+</p>
+
+<h3>Security Rule Summary</h3>
+
+<table class="project-table">
+
+<tr>
+<th>Application Security Group</th>
+<th>Allowed Protocol</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>ASG-Web</td>
+<td>HTTP (TCP 80)</td>
+<td>Allows users to access the hosted web application.</td>
+</tr>
+
+<tr>
+<td>ASG-Management</td>
+<td>RDP (TCP 3389)</td>
+<td>Provides secure administrative access.</td>
+</tr>
+
+<tr>
+<td>All Other Traffic</td>
+<td>Denied</td>
+<td>Reduces unnecessary network exposure.</td>
+</tr>
+
+</table>
+
+<h3>Why This Phase Matters</h3>
+
+<p>
+
+Network Security Groups act as the primary network firewall within Azure.
+Instead of permitting unrestricted communication between workloads, NSGs
+enforce role-specific traffic policies that align with business requirements.
+Combining NSGs with Application Security Groups simplifies administration,
+improves scalability, and significantly reduces the risk of unauthorized
+network access and lateral movement.
+
+</p>
+
+<div class="info-box">
+
+<h3>Security Benefits</h3>
+
+<ul>
+
+<li>Implements least-privilege network access.</li>
+
+<li>Allows only required application traffic.</li>
+
+<li>Blocks unauthorized inbound connections.</li>
+
+<li>Reduces the risk of lateral movement.</li>
+
+<li>Uses Application Security Groups for scalable rule management.</li>
+
+<li>Strengthens Zero Trust network architecture.</li>
+
+<li>Provides centralized and consistent network policy enforcement.</li>
+
+</ul>
+
+</div>
+
+<h3>Outcome</h3>
+
+<p>
+
+Network Security Groups were successfully configured to enforce role-based
+traffic policies for both Web Server and Management Server workloads. Only
+authorized HTTP and RDP traffic was permitted, while all unnecessary inbound
+traffic remained blocked. The segmented Azure environment was now ready for
+security validation and connectivity testing.
+
+</p>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- IMPLEMENTATION PHASE 6 STARTS BELOW -->
+<!-- ========================================= -->
+
+<!-- Phase 6 -->
+
+
+
+<section>
+
+<h2>Implementation Phase 6 – Validate Network Segmentation Through Connectivity Testing</h2>
+
+<h3>Objective</h3>
+
+<p>
+
+After configuring the Network Security Groups, the next phase focused on
+validating that the security policies were functioning as intended. Connectivity
+testing was performed to confirm that the Web Server accepted only HTTP traffic
+while the Management Server accepted only Remote Desktop (RDP) connections.
+Successful validation demonstrates that network segmentation policies are being
+correctly enforced.
+
+</p>
+
+<h3>Implementation</h3>
+
+<p>
+
+Connectivity tests were performed against both virtual machines using their
+assigned public IP addresses. The Web Server was accessed through a web browser
+to verify HTTP connectivity, while the Management Server was accessed using
+Remote Desktop Protocol (RDP). These tests confirmed that only the services
+explicitly permitted by the Network Security Groups were available.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/network-segmentation/task6-http-validation.png"
+alt="HTTP Connectivity Validation"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 11.</strong>
+Successful HTTP connectivity test confirming that the Web Server is accessible
+through the configured Network Security Group rule.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/network-segmentation/task6-rdp-validation.png"
+alt="RDP Connectivity Validation"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 12.</strong>
+Successful Remote Desktop (RDP) connectivity validation for the Management
+Server using the authorized Network Security Group rule.
+
+</p>
+
+<h3>Validation Results</h3>
+
+<table class="project-table">
+
+<tr>
+<th>Validation Test</th>
+<th>Expected Result</th>
+<th>Status</th>
+</tr>
+
+<tr>
+<td>HTTP access to Web Server</td>
+<td>Allowed</td>
+<td>Successful</td>
+</tr>
+
+<tr>
+<td>RDP access to Management Server</td>
+<td>Allowed</td>
+<td>Successful</td>
+</tr>
+
+<tr>
+<td>Unauthorized inbound traffic</td>
+<td>Blocked</td>
+<td>Successful</td>
+</tr>
+
+</table>
+
+<h3>Why This Phase Matters</h3>
+
+<p>
+
+Implementing security controls without validating them can leave organizations
+with a false sense of security. Connectivity testing confirms that Network
+Security Group rules are functioning correctly and that workloads are exposed
+only through approved services. This verification process is an essential part
+of enterprise cloud security operations and supports continuous security
+assurance.
+
+</p>
+
+<div class="info-box">
+
+<h3>Security Benefits</h3>
+
+<ul>
+
+<li>Verifies that security policies are correctly enforced.</li>
+
+<li>Confirms least-privilege network access.</li>
+
+<li>Demonstrates successful workload segmentation.</li>
+
+<li>Identifies potential configuration errors before production deployment.</li>
+
+<li>Provides evidence that unauthorized traffic remains blocked.</li>
+
+<li>Supports ongoing security validation and compliance activities.</li>
+
+</ul>
+
+</div>
+
+<h3>Outcome</h3>
+
+<p>
+
+Connectivity testing confirmed that both Network Security Groups and
+Application Security Groups were operating as expected. The Web Server accepted
+only HTTP traffic, the Management Server accepted only authorized RDP
+connections, and unauthorized traffic remained blocked, demonstrating the
+successful implementation of Azure network segmentation.
+
+</p>
+
+</section>
+
+<hr>
+
+
+<!-- ========================================= -->
+<!-- IMPLEMENTATION PHASE 7 STARTS BELOW -->
+<!-- ========================================= -->
+
+<!-- Phase 7 -->
+
+<section>
+
+<h2>Implementation Phase 7 – Validate Network Security Using Azure Network Watcher</h2>
+
+<h3>Objective</h3>
+
+<p>
+
+The final implementation phase focused on validating the effectiveness of the
+network segmentation architecture using Azure Network Watcher. Rather than
+assuming that the configured Network Security Groups (NSGs) were functioning
+correctly, Azure Network Watcher was used to verify connectivity, inspect
+security rule evaluation, and confirm that network traffic followed the
+intended security policies. This validation provides assurance that the
+implemented controls are operating as designed.
+
+</p>
+
+<h3>Implementation</h3>
+
+<p>
+
+Azure Network Watcher was used to analyze connectivity between Azure resources
+and evaluate how Network Security Group rules affected traffic flows. The
+validation confirmed that HTTP traffic was permitted to the Web Server, Remote
+Desktop (RDP) traffic was allowed only to the Management Server, and all other
+unauthorized traffic remained blocked according to the configured security
+policies.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/network-segmentation/task7-network-watcher-validation.png"
+alt="Azure Network Watcher Validation"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 13.</strong>
+Azure Network Watcher validating network connectivity and confirming that
+Network Security Group rules are correctly enforcing Azure network
+segmentation.
+
+</p>
+
+<h3>Validation Summary</h3>
+
+<table class="project-table">
+
+<tr>
+<th>Validation Activity</th>
+<th>Result</th>
+</tr>
+
+<tr>
+<td>Network Security Group rule evaluation</td>
+<td>Successfully validated.</td>
+</tr>
+
+<tr>
+<td>HTTP connectivity to Web Server</td>
+<td>Allowed according to policy.</td>
+</tr>
+
+<tr>
+<td>RDP connectivity to Management Server</td>
+<td>Allowed according to policy.</td>
+</tr>
+
+<tr>
+<td>Unauthorized traffic attempts</td>
+<td>Blocked as expected.</td>
+</tr>
+
+<tr>
+<td>Network segmentation verification</td>
+<td>Successfully confirmed.</td>
+</tr>
+
+</table>
+
+<h3>Why This Phase Matters</h3>
+
+<p>
+
+Effective cloud security extends beyond deploying security controls—it also
+requires continuous validation and monitoring. Azure Network Watcher provides
+administrators with visibility into network behavior, enabling them to verify
+security rule enforcement, troubleshoot connectivity issues, and confirm that
+production environments remain compliant with organizational security
+standards. Regular validation helps identify misconfigurations before they can
+be exploited.
+
+</p>
+
+<div class="info-box">
+
+<h3>Security Benefits</h3>
+
+<ul>
+
+<li>Verifies Network Security Group rule enforcement.</li>
+
+<li>Confirms successful implementation of network segmentation.</li>
+
+<li>Identifies networking misconfigurations quickly.</li>
+
+<li>Improves visibility into Azure network traffic.</li>
+
+<li>Supports continuous security monitoring and auditing.</li>
+
+<li>Strengthens operational security and cloud governance.</li>
+
+<li>Provides evidence that Zero Trust network policies are functioning correctly.</li>
+
+</ul>
+
+</div>
+
+<h3>Outcome</h3>
+
+<p>
+
+Azure Network Watcher successfully validated the implemented network
+segmentation architecture. Connectivity testing and Network Security Group rule
+analysis confirmed that the Azure environment enforced least-privilege network
+access, restricted unauthorized traffic, and protected workloads according to
+their assigned business roles. The implementation demonstrates a practical
+application of Zero Trust networking and enterprise cloud security best
+practices.
+
+</p>
+
+</section>
+
+<hr>
+
+
+<!-- ========================================= -->
+<!-- FINAL PROJECT SUMMARY SECTIONS START BELOW -->
+<!-- ========================================= -->
+
+<!-- Security Controls -->
+
+<!-- Challenges -->
+
+<!-- Skills -->
+
+<!-- Lessons Learned -->
+
+<!-- References -->
+
+<!-- Related Projects -->
+
+<!-- Project Summary -->
+
+<section>
+
+<h2>Security Controls Implemented</h2>
+
+<ul>
+
+<li>Azure Virtual Network isolation.</li>
+
+<li>Application Security Groups (ASGs) for workload-based segmentation.</li>
+
+<li>Network Security Groups (NSGs) enforcing inbound traffic filtering.</li>
+
+<li>Role-based network access using Application Security Groups.</li>
+
+<li>Least-privilege network access for Web and Management workloads.</li>
+
+<li>Restricted HTTP access to Web Server resources.</li>
+
+<li>Restricted RDP access to Management Server resources.</li>
+
+<li>Azure Network Watcher for connectivity validation and troubleshooting.</li>
+
+<li>Defense-in-depth through layered Azure networking controls.</li>
+
+<li>Zero Trust network segmentation principles.</li>
+
+</ul>
+
+</section>
+
+<hr>
+
+<section>
+
+<h2>Challenges Encountered</h2>
+
+<table class="project-table">
+
+<tr>
+<th>Challenge</th>
+<th>Resolution</th>
+</tr>
+
+<tr>
+<td>Understanding the relationship between ASGs and NSGs.</td>
+<td>Associated virtual machine network interfaces with Application Security Groups before creating Network Security Group rules.</td>
+</tr>
+
+<tr>
+<td>Managing security rules without relying on IP addresses.</td>
+<td>Used Application Security Groups to apply policies based on workload roles rather than static network addresses.</td>
+</tr>
+
+<tr>
+<td>Validating that segmentation rules were functioning correctly.</td>
+<td>Performed HTTP, RDP, and Azure Network Watcher connectivity tests to verify policy enforcement.</td>
+</tr>
+
+<tr>
+<td>Reducing unnecessary network exposure.</td>
+<td>Configured Network Security Groups to permit only business-required traffic while denying all other inbound connections.</td>
+</tr>
+
+</table>
+
+</section>
+
+<hr>
+
+<section>
+
+<h2>Skills Demonstrated</h2>
+
+<div class="card-grid">
+
+<div class="card">
+<h3>Azure Virtual Networking</h3>
+<p>
+Designed secure virtual networking infrastructure for enterprise cloud workloads.
+</p>
+</div>
+
+<div class="card">
+<h3>Application Security Groups</h3>
+<p>
+Implemented logical workload grouping for scalable network security management.
+</p>
+</div>
+
+<div class="card">
+<h3>Network Security Groups</h3>
+<p>
+Configured stateful firewall rules to enforce least-privilege networking.
+</p>
+</div>
+
+<div class="card">
+<h3>Network Segmentation</h3>
+<p>
+Separated application workloads to reduce lateral movement and improve security.
+</p>
+</div>
+
+<div class="card">
+<h3>Azure Network Watcher</h3>
+<p>
+Validated connectivity, troubleshooting, and Network Security Group rule enforcement.
+</p>
+</div>
+
+<div class="card">
+<h3>Zero Trust Networking</h3>
+<p>
+Applied workload-based access controls aligned with enterprise cloud security best practices.
+</p>
+</div>
+
+</div>
+
+</section>
+
+<hr>
+
+<section>
+
+<h2>Lessons Learned</h2>
+
+<p>
+
+This project demonstrated that effective network security extends beyond simply
+deploying firewall rules. Proper network segmentation requires logical workload
+grouping, carefully designed security policies, and continuous validation to
+ensure that only authorized communication is permitted between resources.
+
+</p>
+
+<p>
+
+Application Security Groups significantly simplify Network Security Group
+management by allowing administrators to define security policies according to
+business roles rather than individual IP addresses. This approach improves
+scalability, reduces administrative complexity, and supports dynamic cloud
+environments where workloads frequently change.
+
+</p>
+
+<p>
+
+The project also reinforced the importance of validating implemented security
+controls. Using Azure Network Watcher confirmed that network segmentation was
+operating correctly and that unauthorized traffic remained blocked. Together,
+Azure Virtual Networks, Application Security Groups, Network Security Groups,
+and Azure Network Watcher provide a layered defense-in-depth architecture that
+aligns with Zero Trust networking principles.
+
+</p>
+
+</section>
+
+<hr>
+
+<section>
+
+<h2>References</h2>
+
+<ul>
+
+<li>Microsoft Learn – Azure Virtual Network documentation</li>
+
+<li>Microsoft Learn – Network Security Groups documentation</li>
+
+<li>Microsoft Learn – Application Security Groups documentation</li>
+
+<li>Microsoft Learn – Azure Network Watcher documentation</li>
+
+<li>Microsoft Learn – Azure networking security best practices</li>
+
+<li>Microsoft Learn – Zero Trust guidance for Azure</li>
+
+</ul>
+
+</section>
+
+<hr>
+
+<section>
+
+<h2>Related Projects</h2>
+
+<ul>
+
+<li><a href="azure-firewall.html">Azure Firewall Deployment and Traffic Control</a></li>
+
+<li><a href="rbac-security.html">Azure Role-Based Access Control (RBAC)</a></li>
+
+<li><a href="storage-security.html">Azure Storage Security with Service Endpoints and Network Security Groups</a></li>
+
+<li><a href="aks-security.html">AKS & Azure Container Registry Security</a></li>
+
+</ul>
+
+</section>
+
+<hr>
+
+<section>
+
+<h2>Project Summary</h2>
+
+<p>
+
+This project demonstrated how Azure Virtual Networks, Application Security
+Groups (ASGs), and Network Security Groups (NSGs) can be combined to implement
+secure network segmentation within a cloud environment. By grouping workloads
+according to their business function and applying role-based traffic policies,
+the solution reduced unnecessary network exposure and limited opportunities for
+lateral movement.
+
+</p>
+
+<p>
+
+The implementation concluded with comprehensive validation using connectivity
+testing and Azure Network Watcher, confirming that the configured security
+controls functioned as intended. This project strengthened practical skills in
+Azure networking, network segmentation, Zero Trust architecture, and cloud
+security governance while demonstrating the design, implementation, and
+verification of enterprise-grade network security controls.
+
+</p>
+
+</section>
+
+
+
+</div>
+
 </body>
 </html>

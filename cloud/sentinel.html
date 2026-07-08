@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Microsoft Sentinel – Cloud SIEM and Threat Detection</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+
+<nav>
+    <a href="../index.html">Home</a>
+    <a href="../cloud/index.html">Cloud Security</a>
+    <a href="../soc/index.html">SOC Analyst</a>
+    <a href="../aiml/index.html">AI/ML Security</a>
+    <a href="../projects/index.html">Projects</a>
+    <a href="../resume/index.html">Resume</a>
+</nav>
+
+<div class="container">
+
+<h1>Microsoft Sentinel – Cloud SIEM, Threat Detection, and Incident Response</h1>
+
+<h2>Project Overview</h2>
+
+<p>
+
+This project demonstrates the deployment and configuration of Microsoft
+Sentinel to provide centralized Security Information and Event Management
+(SIEM) and Security Orchestration, Automation, and Response (SOAR)
+capabilities within Microsoft Azure. Microsoft Sentinel enables organizations
+to collect security telemetry, detect threats, investigate incidents, perform
+threat hunting, and automate security response using a cloud-native security
+operations platform.
+
+</p>
+
+<h2>Business Scenario</h2>
+
+<p>
+
+A fictional organization requires centralized visibility across its cloud
+environment after migrating workloads to Microsoft Azure. Security logs are
+generated from multiple services, making it difficult to detect suspicious
+activity and respond efficiently. Microsoft Sentinel is deployed to collect,
+correlate, and analyze security events while providing security analysts with
+a single platform for threat detection, investigation, and incident response.
+
+</p>
+
+<h2>Security Objectives</h2>
+
+<ul>
+
+<li>Deploy Microsoft Sentinel as the organization's cloud SIEM.</li>
+
+<li>Centralize security log collection.</li>
+
+<li>Configure Azure data connectors.</li>
+
+<li>Investigate security incidents.</li>
+
+<li>Perform threat hunting using Kusto Query Language (KQL).</li>
+
+<li>Automate incident response workflows.</li>
+
+<li>Improve security operations visibility.</li>
+
+</ul>
+
+<h2>Solution Architecture</h2>
+
+<img
+src="../assets/img/cloud-security/sentinel/architecture.png"
+alt="Microsoft Sentinel Architecture"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 1.</strong>
+
+Microsoft Sentinel collecting telemetry from Azure resources through Log
+Analytics, correlating security events, detecting threats, and supporting
+incident investigation and automated response.
+
+</p>
+
+<h2>Microsoft Security Services Used</h2>
+
+<table class="project-table">
+
+<tr>
+<th>Service</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>Microsoft Sentinel</td>
+<td>Cloud-native SIEM and SOAR platform.</td>
+</tr>
+
+<tr>
+<td>Log Analytics Workspace</td>
+<td>Central repository for security telemetry and log storage.</td>
+</tr>
+
+<tr>
+<td>Azure Monitor</td>
+<td>Collects operational and security logs.</td>
+</tr>
+
+<tr>
+<td>Data Connectors</td>
+<td>Ingest security events from Azure and Microsoft services.</td>
+</tr>
+
+<tr>
+<td>Kusto Query Language (KQL)</td>
+<td>Searches, analyzes, and investigates security events.</td>
+</tr>
+
+<tr>
+<td>Automation Rules</td>
+<td>Automates incident response and security workflows.</td>
+</tr>
+
+</table>
+
+<h2>Threats Addressed</h2>
+
+<table class="project-table">
+
+<tr>
+<th>Threat</th>
+<th>Mitigation</th>
+</tr>
+
+<tr>
+<td>Delayed threat detection</td>
+<td>Centralized security monitoring and analytics.</td>
+</tr>
+
+<tr>
+<td>Fragmented security logs</td>
+<td>Log Analytics Workspace aggregation.</td>
+</tr>
+
+<tr>
+<td>Unauthorized activity</td>
+<td>Real-time security alerts and incident creation.</td>
+</tr>
+
+<tr>
+<td>Slow incident response</td>
+<td>Automation rules and investigation workflows.</td>
+</tr>
+
+<tr>
+<td>Hidden attacker activity</td>
+<td>Threat hunting using Kusto Query Language.</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Implementation Overview</h2>
+
+<p>
+
+The implementation followed seven structured phases beginning with the
+creation of a Log Analytics Workspace, followed by Microsoft Sentinel
+deployment, data connector configuration, security incident investigation,
+log analysis using Kusto Query Language (KQL), proactive threat hunting,
+and security automation. Together these phases demonstrate how Microsoft
+Sentinel supports modern Security Operations Center (SOC) activities.
+
+</p>
+
+<h2>Expected Security Outcomes</h2>
+
+<ul>
+
+<li>Centralized cloud security monitoring.</li>
+
+<li>Improved threat detection capabilities.</li>
+
+<li>Faster incident investigation.</li>
+
+<li>Centralized security log management.</li>
+
+<li>Improved SOC visibility.</li>
+
+<li>Automated incident response.</li>
+
+<li>Enhanced threat hunting capabilities.</li>
+
+</ul>
+
+<h2>Skills Demonstrated</h2>
+
+<ul>
+
+<li>Microsoft Sentinel</li>
+
+<li>Cloud SIEM</li>
+
+<li>SOAR</li>
+
+<li>Threat Detection</li>
+
+<li>Threat Hunting</li>
+
+<li>Kusto Query Language (KQL)</li>
+
+<li>Incident Investigation</li>
+
+<li>Security Analytics</li>
+
+<li>Log Analytics</li>
+
+<li>Azure Monitor</li>
+
+<li>Detection Engineering</li>
+
+</ul>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- IMPLEMENTATION PHASE 1 STARTS BELOW -->
+<!-- ========================================= -->
+
+<!-- Phase 1 -->
+
+<section>
+
+<h2>Implementation Phase 1 – Create the Log Analytics Workspace</h2>
+
+<h3>Objective</h3>
+
+<p>
+
+The first phase focused on creating an Azure Log Analytics Workspace, which
+serves as the data collection and storage foundation for Microsoft Sentinel.
+Before security events can be analyzed or incidents detected, Microsoft
+Sentinel requires a centralized repository to collect, normalize, and retain
+telemetry from Azure resources and connected services. The Log Analytics
+Workspace enables security teams to perform real-time monitoring, historical
+analysis, and forensic investigations using a single source of security data.
+
+</p>
+
+<h3>Implementation</h3>
+
+<p>
+
+A new Log Analytics Workspace was created within the Azure subscription using
+the Azure Portal. During deployment, the appropriate subscription, resource
+group, geographic region, and workspace name were configured. After successful
+creation, the workspace became available for onboarding Microsoft Sentinel and
+receiving security logs from Azure services through data connectors.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/sentinel/task1-log-analytics-workspace.png"
+alt="Azure Log Analytics Workspace"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 2.</strong>
+Azure Log Analytics Workspace successfully deployed to provide centralized log
+collection, storage, and analysis for Microsoft Sentinel.
+
+</p>
+
+<h3>Workspace Configuration</h3>
+
+<table class="project-table">
+
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>Log Analytics Workspace</td>
+<td>Central repository for security logs and telemetry.</td>
+</tr>
+
+<tr>
+<td>Azure Subscription</td>
+<td>Defines the cloud environment hosting the workspace.</td>
+</tr>
+
+<tr>
+<td>Resource Group</td>
+<td>Provides logical organization and lifecycle management.</td>
+</tr>
+
+<tr>
+<td>Azure Region</td>
+<td>Determines the physical location where log data is stored.</td>
+</tr>
+
+<tr>
+<td>Data Retention</td>
+<td>Controls how long collected logs remain available for analysis.</td>
+</tr>
+
+</table>
+
+<h3>Why This Phase Matters</h3>
+
+<p>
+
+Modern Security Information and Event Management (SIEM) platforms depend on
+centralized visibility into security events. The Log Analytics Workspace acts
+as the core data platform for Microsoft Sentinel, allowing logs from multiple
+Azure services and connected systems to be aggregated into a single location.
+Centralized log collection enables efficient threat detection, security
+analytics, compliance reporting, and incident investigations.
+
+</p>
+
+<div class="info-box">
+
+<h3>Security Benefits</h3>
+
+<ul>
+
+<li>Centralizes security log collection across Azure resources.</li>
+
+<li>Supports real-time monitoring and security analytics.</li>
+
+<li>Provides scalable storage for operational and security telemetry.</li>
+
+<li>Enables historical investigations and forensic analysis.</li>
+
+<li>Serves as the data foundation for Microsoft Sentinel.</li>
+
+<li>Supports compliance reporting and audit requirements.</li>
+
+<li>Improves visibility across the cloud environment.</li>
+
+</ul>
+
+</div>
+
+<h3>Outcome</h3>
+
+<p>
+
+The Log Analytics Workspace was successfully created and configured,
+establishing the foundational data platform required for Microsoft Sentinel.
+With centralized log storage in place, the environment was ready for deploying
+Microsoft Sentinel and onboarding Azure security telemetry in the next phase.
+
+</p>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- IMPLEMENTATION PHASE 2 STARTS BELOW -->
+<!-- ========================================= -->
+
+<section>
+
+<h2>Implementation Phase 2 – Deploy Microsoft Sentinel</h2>
+
+<h3>Objective</h3>
+
+<p>
+
+Following the successful creation of the Log Analytics Workspace, the next
+phase focused on deploying Microsoft Sentinel. Microsoft Sentinel is a
+cloud-native Security Information and Event Management (SIEM) and Security
+Orchestration, Automation, and Response (SOAR) platform that extends the Log
+Analytics Workspace with advanced threat detection, security analytics,
+incident management, and automated response capabilities. This deployment
+established the organization's centralized Security Operations Center (SOC)
+platform for monitoring Azure resources.
+
+</p>
+
+<h3>Implementation</h3>
+
+<p>
+
+Microsoft Sentinel was deployed from the Azure Portal by selecting the
+previously created Log Analytics Workspace. During deployment, Sentinel was
+associated with the workspace, enabling it to begin collecting, correlating,
+and analyzing security telemetry. Once onboarding completed successfully, the
+Microsoft Sentinel dashboard became available, providing centralized access to
+incidents, analytics, workbooks, threat hunting, automation, and data
+connectors.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/sentinel/task2-sentinel-deployment.png"
+alt="Microsoft Sentinel Deployment"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 3.</strong>
+Microsoft Sentinel successfully deployed and connected to the Azure Log
+Analytics Workspace, providing cloud-native SIEM and SOAR capabilities.
+
+</p>
+
+<h3>Deployment Components</h3>
+
+<table class="project-table">
+
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>Microsoft Sentinel</td>
+<td>Provides cloud-native SIEM and SOAR functionality.</td>
+</tr>
+
+<tr>
+<td>Log Analytics Workspace</td>
+<td>Stores and processes security telemetry collected by Sentinel.</td>
+</tr>
+
+<tr>
+<td>Sentinel Dashboard</td>
+<td>Centralized interface for monitoring security events and incidents.</td>
+</tr>
+
+<tr>
+<td>Analytics Engine</td>
+<td>Correlates security events and generates detections.</td>
+</tr>
+
+<tr>
+<td>Incident Management</td>
+<td>Organizes detected threats into manageable security incidents.</td>
+</tr>
+
+</table>
+
+<h3>Why This Phase Matters</h3>
+
+<p>
+
+Deploying Microsoft Sentinel transforms raw security logs into actionable
+security intelligence. Instead of manually reviewing individual log sources,
+Sentinel automatically correlates events across connected systems to identify
+suspicious activity and generate prioritized incidents. This centralized
+approach significantly improves threat visibility, reduces investigation time,
+and enables security analysts to respond more effectively to emerging threats.
+
+</p>
+
+<div class="info-box">
+
+<h3>Security Benefits</h3>
+
+<ul>
+
+<li>Centralizes security monitoring across Azure resources.</li>
+
+<li>Correlates events from multiple data sources.</li>
+
+<li>Provides cloud-native SIEM capabilities.</li>
+
+<li>Supports automated incident creation and investigation.</li>
+
+<li>Improves visibility into security threats.</li>
+
+<li>Establishes the foundation for threat hunting and incident response.</li>
+
+<li>Enhances SOC operational efficiency.</li>
+
+</ul>
+
+</div>
+
+<h3>Outcome</h3>
+
+<p>
+
+Microsoft Sentinel was successfully deployed and integrated with the Log
+Analytics Workspace. The environment now supports centralized security
+monitoring, event correlation, incident management, and advanced analytics,
+providing the foundation for configuring data connectors and enabling
+comprehensive threat detection in the subsequent implementation phases.
+
+</p>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- IMPLEMENTATION PHASE 3 STARTS BELOW -->
+<!-- ========================================= -->
+
+<section>
+
+<h2>Implementation Phase 3 – Configure Data Connectors</h2>
+
+<h3>Objective</h3>
+
+<p>
+
+With Microsoft Sentinel successfully deployed, the next phase focused on
+configuring data connectors to ingest security telemetry from Azure services.
+Data connectors enable Microsoft Sentinel to collect logs, security events,
+alerts, and activity records from multiple sources, creating a centralized
+repository for monitoring, analytics, and incident detection. This integration
+allows security analysts to correlate events across the cloud environment and
+gain comprehensive visibility into organizational security.
+
+</p>
+
+<h3>Implementation</h3>
+
+<p>
+
+The <strong>Data Connectors</strong> section within Microsoft Sentinel was
+accessed through the Azure Portal. Available connectors were reviewed, and
+appropriate Azure services were connected to the Log Analytics Workspace.
+Depending on the lab environment, connectors such as Azure Activity, Microsoft
+Defender for Cloud, Microsoft Entra ID, Azure Monitor, and Security Events
+were enabled. Once configured, security telemetry began flowing into Microsoft
+Sentinel for continuous analysis and correlation.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/sentinel/task3-data-connectors.png"
+alt="Microsoft Sentinel Data Connectors"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 4.</strong>
+Microsoft Sentinel Data Connectors configured to collect security telemetry
+from Azure services and provide centralized visibility into security events.
+
+</p>
+
+<h3>Configured Data Sources</h3>
+
+<table class="project-table">
+
+<tr>
+<th>Data Connector</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>Azure Activity</td>
+<td>Collects subscription-level administrative and operational events.</td>
+</tr>
+
+<tr>
+<td>Microsoft Defender for Cloud</td>
+<td>Imports security alerts and recommendations from Azure workloads.</td>
+</tr>
+
+<tr>
+<td>Microsoft Entra ID</td>
+<td>Captures authentication, sign-in, and identity-related security events.</td>
+</tr>
+
+<tr>
+<td>Azure Monitor</td>
+<td>Provides diagnostic logs and performance telemetry.</td>
+</tr>
+
+<tr>
+<td>Security Events</td>
+<td>Collects operating system security logs from connected virtual machines.</td>
+</tr>
+
+</table>
+
+<h3>Why This Phase Matters</h3>
+
+<p>
+
+A Security Information and Event Management (SIEM) platform is only as effective
+as the quality and breadth of the data it receives. By integrating multiple
+Azure services through data connectors, Microsoft Sentinel can correlate events
+across identities, workloads, networks, and infrastructure. This holistic
+visibility enables earlier threat detection, more accurate investigations, and
+improved incident response while reducing the likelihood of isolated security
+events being overlooked.
+
+</p>
+
+<div class="info-box">
+
+<h3>Security Benefits</h3>
+
+<ul>
+
+<li>Centralizes security telemetry from multiple Azure services.</li>
+
+<li>Improves visibility across identities, workloads, and infrastructure.</li>
+
+<li>Enables event correlation for more accurate threat detection.</li>
+
+<li>Supports real-time monitoring and security analytics.</li>
+
+<li>Provides the data required for incident investigation and threat hunting.</li>
+
+<li>Strengthens overall Security Operations Center (SOC) visibility.</li>
+
+<li>Establishes the foundation for analytics rules and automated response.</li>
+
+</ul>
+
+</div>
+
+<h3>Outcome</h3>
+
+<p>
+
+Microsoft Sentinel successfully integrated with multiple Azure data sources,
+allowing security events to flow into the Log Analytics Workspace for analysis.
+With centralized telemetry collection established, the environment was prepared
+for creating and investigating security incidents, performing advanced Kusto
+Query Language (KQL) searches, and conducting proactive threat hunting in the
+following implementation phases.
+
+</p>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- IMPLEMENTATION PHASE 4 STARTS BELOW -->
+<!-- ========================================= -->
+
+<section>
+
+<h2>Implementation Phase 4 – Generate and Investigate Security Incidents</h2>
+
+<h3>Objective</h3>
+
+<p>
+
+After configuring data connectors, the next phase focused on validating
+Microsoft Sentinel's incident management capabilities. Security incidents are
+generated when analytics rules identify suspicious or malicious activity within
+the collected telemetry. These incidents consolidate related alerts into a
+single investigation, enabling security analysts to efficiently assess,
+prioritize, and respond to potential threats across the Azure environment.
+
+</p>
+
+<h3>Implementation</h3>
+
+<p>
+
+The <strong>Incidents</strong> section of Microsoft Sentinel was used to review
+generated security incidents. Each incident contained relevant information,
+including severity, status, associated alerts, affected entities, timestamps,
+and recommended investigation actions. The investigation panel was used to
+analyze related events, identify impacted resources, and determine whether the
+activity represented a legitimate security threat or a false positive.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/sentinel/task4-security-incidents.png"
+alt="Microsoft Sentinel Security Incidents"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 5.</strong>
+Microsoft Sentinel incident dashboard displaying detected security incidents,
+severity levels, affected entities, and investigation details.
+
+</p>
+
+<h3>Incident Investigation Components</h3>
+
+<table class="project-table">
+
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>Incident Severity</td>
+<td>Prioritizes incidents based on organizational risk.</td>
+</tr>
+
+<tr>
+<td>Alerts</td>
+<td>Displays correlated security detections contributing to the incident.</td>
+</tr>
+
+<tr>
+<td>Entities</td>
+<td>Identifies impacted users, hosts, IP addresses, and Azure resources.</td>
+</tr>
+
+<tr>
+<td>Investigation Graph</td>
+<td>Visualizes relationships between alerts and affected entities.</td>
+</tr>
+
+<tr>
+<td>Incident Timeline</td>
+<td>Provides a chronological sequence of security events.</td>
+</tr>
+
+</table>
+
+<h3>Why This Phase Matters</h3>
+
+<p>
+
+Modern Security Operations Centers (SOCs) receive thousands of security events
+every day. Investigating individual alerts independently is inefficient and can
+cause analysts to overlook relationships between seemingly unrelated events.
+Microsoft Sentinel correlates alerts into incidents, reducing alert fatigue,
+improving investigation efficiency, and enabling analysts to focus on the most
+significant security threats. This correlation capability significantly reduces
+mean time to detect (MTTD) and mean time to respond (MTTR).
+
+</p>
+
+<div class="info-box">
+
+<h3>Security Benefits</h3>
+
+<ul>
+
+<li>Correlates related alerts into a single security incident.</li>
+
+<li>Prioritizes incidents based on severity and organizational risk.</li>
+
+<li>Provides centralized investigation workflows.</li>
+
+<li>Improves visibility into attacker activity across Azure resources.</li>
+
+<li>Reduces alert fatigue through event correlation.</li>
+
+<li>Supports faster incident triage and response.</li>
+
+<li>Enhances overall Security Operations Center (SOC) efficiency.</li>
+
+</ul>
+
+</div>
+
+<h3>Outcome</h3>
+
+<p>
+
+Microsoft Sentinel successfully generated and managed security incidents based
+on collected telemetry and configured analytics rules. The investigation tools
+provided analysts with comprehensive visibility into correlated alerts,
+affected entities, and attack timelines, enabling efficient incident analysis
+and preparing the environment for advanced log analysis and threat hunting
+using Kusto Query Language (KQL).
+
+</p>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- IMPLEMENTATION PHASE 5 STARTS BELOW -->
+<!-- ========================================= -->
+
+<section>
+
+<h2>Implementation Phase 5 – Query Security Logs Using Kusto Query Language (KQL)</h2>
+
+<h3>Objective</h3>
+
+<p>
+
+After validating incident management capabilities, the next phase focused on
+using Kusto Query Language (KQL) to search, filter, and analyze security data
+stored within the Log Analytics Workspace. KQL enables security analysts to
+perform detailed investigations, identify suspicious behavior, validate
+security incidents, and extract meaningful insights from large volumes of
+security telemetry. It is one of the primary tools used during incident
+response and threat hunting within Microsoft Sentinel.
+
+</p>
+
+<h3>Implementation</h3>
+
+<p>
+
+The <strong>Logs</strong> section within Microsoft Sentinel was opened to
+execute Kusto Query Language (KQL) queries against collected security data.
+Sample queries were used to retrieve Azure Activity logs, authentication
+events, security alerts, and operational telemetry. Query results were refined
+using filtering, sorting, and aggregation techniques to identify abnormal
+activity and support security investigations.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/sentinel/task5-kql-queries.png"
+alt="Microsoft Sentinel Kusto Query Language"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 6.</strong>
+Executing Kusto Query Language (KQL) queries within Microsoft Sentinel to
+search, analyze, and investigate security events collected from Azure
+resources.
+
+</p>
+
+<h3>Example Investigation Queries</h3>
+
+<table class="project-table">
+
+<tr>
+<th>KQL Query Purpose</th>
+<th>Security Objective</th>
+</tr>
+
+<tr>
+<td>Retrieve Azure Activity Logs</td>
+<td>Review administrative operations and configuration changes.</td>
+</tr>
+
+<tr>
+<td>Search Sign-In Events</td>
+<td>Identify failed or suspicious authentication attempts.</td>
+</tr>
+
+<tr>
+<td>Review Security Alerts</td>
+<td>Analyze alerts generated by Microsoft Defender and Sentinel.</td>
+</tr>
+
+<tr>
+<td>Filter by Time Range</td>
+<td>Investigate events occurring during a specific incident window.</td>
+</tr>
+
+<tr>
+<td>Summarize Events</td>
+<td>Identify trends, anomalies, and recurring security events.</td>
+</tr>
+
+</table>
+
+<h3>Why This Phase Matters</h3>
+
+<p>
+
+Security analysts rarely rely solely on automated alerts. During investigations,
+they must query raw security telemetry to validate findings, identify attack
+patterns, and uncover evidence that may not be immediately visible through the
+incident dashboard. Kusto Query Language provides a fast and powerful method
+for exploring large datasets, making it an essential skill for modern Security
+Operations Centers (SOCs), threat hunters, and incident responders.
+
+</p>
+
+<div class="info-box">
+
+<h3>Security Benefits</h3>
+
+<ul>
+
+<li>Supports detailed investigation of security incidents.</li>
+
+<li>Enables rapid searching across millions of security events.</li>
+
+<li>Identifies suspicious authentication and administrative activity.</li>
+
+<li>Improves evidence collection during incident response.</li>
+
+<li>Supports proactive threat hunting and anomaly detection.</li>
+
+<li>Provides flexible log analysis through powerful query capabilities.</li>
+
+<li>Strengthens SOC investigation and forensic workflows.</li>
+
+</ul>
+
+</div>
+
+<h3>Outcome</h3>
+
+<p>
+
+Kusto Query Language was successfully used to analyze security telemetry
+collected within Microsoft Sentinel. Query results provided detailed visibility
+into authentication events, Azure Activity logs, and security alerts,
+demonstrating how security analysts can investigate incidents, validate
+detections, and uncover suspicious activity through advanced log analysis.
+
+</p>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- IMPLEMENTATION PHASE 6 STARTS BELOW -->
+<!-- ========================================= -->
+
+<section>
+
+<h2>Implementation Phase 6 – Proactive Threat Hunting</h2>
+
+<h3>Objective</h3>
+
+<p>
+
+Following incident investigation and log analysis, the next phase focused on
+proactive threat hunting within Microsoft Sentinel. Threat hunting enables
+security analysts to actively search for Indicators of Compromise (IOCs),
+anomalous behavior, and attacker techniques that may not trigger predefined
+analytics rules. By leveraging Microsoft Sentinel's hunting capabilities and
+Kusto Query Language (KQL), organizations can identify sophisticated threats
+before they escalate into security incidents.
+
+</p>
+
+<h3>Implementation</h3>
+
+<p>
+
+The <strong>Hunting</strong> section of Microsoft Sentinel was accessed to
+review available hunting queries aligned with the MITRE ATT&CK framework.
+Built-in hunting queries were executed to analyze authentication activity,
+administrative operations, network communications, and other security events.
+KQL was used to customize queries, filter results, and investigate suspicious
+patterns that could indicate malicious activity or unauthorized access.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/sentinel/task6-threat-hunting.png"
+alt="Microsoft Sentinel Threat Hunting"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 7.</strong>
+Using Microsoft Sentinel Hunting to proactively search for suspicious activity
+and indicators of compromise across Azure resources.
+
+</p>
+
+<h3>Threat Hunting Activities</h3>
+
+<table class="project-table">
+
+<tr>
+<th>Hunting Activity</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>Review MITRE ATT&CK Queries</td>
+<td>Search for behaviors associated with known attacker techniques.</td>
+</tr>
+
+<tr>
+<td>Analyze Sign-In Activity</td>
+<td>Identify abnormal authentication attempts and potential account compromise.</td>
+</tr>
+
+<tr>
+<td>Investigate Administrative Changes</td>
+<td>Detect unexpected modifications to Azure resources.</td>
+</tr>
+
+<tr>
+<td>Search Security Events</td>
+<td>Identify suspicious activity not detected by analytics rules.</td>
+</tr>
+
+<tr>
+<td>Customize KQL Queries</td>
+<td>Refine searches to investigate organization-specific threats.</td>
+</tr>
+
+</table>
+
+<h3>Why This Phase Matters</h3>
+
+<p>
+
+Traditional security monitoring relies on predefined detection rules to
+generate alerts. However, sophisticated attackers may avoid triggering these
+rules by using stealthy techniques or legitimate administrative tools.
+Threat hunting shifts security operations from a reactive approach to a
+proactive one, enabling analysts to identify hidden threats through hypothesis-
+driven investigations and behavioral analysis. This capability significantly
+improves an organization's ability to detect advanced persistent threats
+(APTs), insider threats, and other sophisticated attack techniques.
+
+</p>
+
+<div class="info-box">
+
+<h3>Security Benefits</h3>
+
+<ul>
+
+<li>Proactively identifies hidden threats before automated detection.</li>
+
+<li>Leverages MITRE ATT&CK techniques to guide investigations.</li>
+
+<li>Improves visibility into suspicious user and system behavior.</li>
+
+<li>Enhances detection of advanced persistent threats (APTs).</li>
+
+<li>Supports evidence-based investigations using KQL.</li>
+
+<li>Strengthens the organization's threat detection capabilities.</li>
+
+<li>Improves overall Security Operations Center (SOC) maturity.</li>
+
+</ul>
+
+</div>
+
+<h3>Outcome</h3>
+
+<p>
+
+Microsoft Sentinel successfully supported proactive threat hunting by
+combining built-in hunting queries, MITRE ATT&CK mapping, and Kusto Query
+Language. Security analysts gained the ability to investigate suspicious
+activity beyond automated alerts, improving the organization's capability to
+identify emerging threats and strengthen its overall security posture.
+
+</p>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- IMPLEMENTATION PHASE 7 STARTS BELOW -->
+<!-- ========================================= -->
+
+<section>
+
+<h2>Implementation Phase 7 – Automate Incident Response Using Automation Rules and Playbooks</h2>
+
+<h3>Objective</h3>
+
+<p>
+
+The final implementation phase focused on improving incident response through
+Microsoft Sentinel's Security Orchestration, Automation, and Response (SOAR)
+capabilities. Automation Rules and Playbooks enable organizations to automate
+routine security tasks, reduce analyst workload, accelerate response times,
+and ensure that incident handling follows standardized procedures. This allows
+Security Operations Center (SOC) teams to concentrate on complex investigations
+while repetitive actions are performed automatically.
+
+</p>
+
+<h3>Implementation</h3>
+
+<p>
+
+Automation Rules were reviewed within Microsoft Sentinel to define how newly
+generated incidents should be handled. Logic App Playbooks were configured to
+perform automated response actions such as assigning incidents, updating
+incident status, sending notifications, enriching investigation data, and
+triggering predefined response workflows. The automation process was validated
+to ensure that security incidents could be processed consistently with minimal
+manual intervention.
+
+</p>
+
+<img
+src="../assets/img/cloud-security/sentinel/task7-automation-rules.png"
+alt="Microsoft Sentinel Automation Rules and Playbooks"
+class="project-image">
+
+<p class="image-caption">
+
+<strong>Figure 8.</strong>
+Microsoft Sentinel Automation Rules and Logic App Playbooks providing
+automated incident response and security orchestration across the Azure
+environment.
+
+</p>
+
+<h3>Automation Components</h3>
+
+<table class="project-table">
+
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>Automation Rules</td>
+<td>Automatically process incidents based on predefined conditions.</td>
+</tr>
+
+<tr>
+<td>Logic App Playbooks</td>
+<td>Execute automated security response workflows.</td>
+</tr>
+
+<tr>
+<td>Incident Assignment</td>
+<td>Assign incidents to appropriate security analysts or teams.</td>
+</tr>
+
+<tr>
+<td>Email Notifications</td>
+<td>Notify administrators of high-priority security incidents.</td>
+</tr>
+
+<tr>
+<td>Incident Enrichment</td>
+<td>Add contextual information to support investigations.</td>
+</tr>
+
+<tr>
+<td>Workflow Automation</td>
+<td>Reduce repetitive manual tasks during incident response.</td>
+</tr>
+
+</table>
+
+<h3>Why This Phase Matters</h3>
+
+<p>
+
+As organizations grow, the volume of security alerts can quickly overwhelm SOC
+teams. Manual investigation and response increase Mean Time to Respond (MTTR)
+and raise the risk of inconsistent handling. Microsoft Sentinel's SOAR
+capabilities automate repetitive tasks, standardize response procedures, and
+accelerate containment of security threats. Automation improves operational
+efficiency while enabling analysts to focus on higher-value investigative and
+strategic activities.
+
+</p>
+
+<div class="info-box">
+
+<h3>Security Benefits</h3>
+
+<ul>
+
+<li>Accelerates incident response through automated workflows.</li>
+
+<li>Reduces manual effort for repetitive SOC tasks.</li>
+
+<li>Improves consistency in incident handling procedures.</li>
+
+<li>Supports rapid notification and escalation of critical incidents.</li>
+
+<li>Enriches investigations with contextual security information.</li>
+
+<li>Reduces Mean Time to Respond (MTTR).</li>
+
+<li>Strengthens overall Security Operations Center (SOC) efficiency.</li>
+
+</ul>
+
+</div>
+
+<h3>Outcome</h3>
+
+<p>
+
+Microsoft Sentinel successfully demonstrated Security Orchestration,
+Automation, and Response (SOAR) capabilities through Automation Rules and
+Logic App Playbooks. Automated workflows streamlined incident handling,
+reduced response times, and improved operational consistency across the Azure
+environment. Combined with centralized monitoring, incident investigation,
+KQL analysis, and proactive threat hunting, these capabilities established a
+modern cloud-native Security Operations Center capable of efficiently
+detecting, investigating, and responding to evolving cyber threats.
+
+</p>
+
+</section>
+
+<hr>
+
+<!-- ========================================= -->
+<!-- FINAL PROJECT SUMMARY SECTIONS START BELOW -->
+<!-- ========================================= -->
+
+<section>
+
+<h2>Security Controls Implemented</h2>
+
+<ul>
+
+<li>Cloud-native Security Information and Event Management (SIEM).</li>
+
+<li>Security Orchestration, Automation, and Response (SOAR).</li>
+
+<li>Centralized log collection using Log Analytics Workspace.</li>
+
+<li>Azure and Microsoft service data connectors.</li>
+
+<li>Security analytics and incident correlation.</li>
+
+<li>Kusto Query Language (KQL) log analysis.</li>
+
+<li>Threat hunting using MITRE ATT&CK aligned queries.</li>
+
+<li>Automation Rules and Logic App Playbooks.</li>
+
+<li>Continuous security monitoring and alerting.</li>
+
+<li>Incident investigation and response workflows.</li>
+
+</ul>
+
+</section>
+
+<hr>
+
+<section>
+
+<h2>Challenges Encountered</h2>
+
+<table class="project-table">
+
+<tr>
+<th>Challenge</th>
+<th>Resolution</th>
+</tr>
+
+<tr>
+<td>Understanding how Microsoft Sentinel integrates with Azure services.</td>
+<td>Configured a Log Analytics Workspace and connected Microsoft Sentinel as the central SIEM platform.</td>
+</tr>
+
+<tr>
+<td>Managing logs from multiple Azure resources.</td>
+<td>Configured Data Connectors to centralize telemetry within a single workspace.</td>
+</tr>
+
+<tr>
+<td>Investigating large volumes of security events.</td>
+<td>Used incident correlation, investigation graphs, and Kusto Query Language (KQL) to efficiently analyze security data.</td>
+</tr>
+
+<tr>
+<td>Reducing manual incident response activities.</td>
+<td>Implemented Automation Rules and Logic App Playbooks to streamline repetitive SOC tasks.</td>
+</tr>
+
+</table>
+
+</section>
+
+<hr>
+
+<section>
+
+<h2>Skills Demonstrated</h2>
+
+<div class="card-grid">
+
+<div class="card">
+<h3>Microsoft Sentinel</h3>
+<p>
+Deployed and configured Microsoft's cloud-native SIEM and SOAR platform for centralized security operations.
+</p>
+</div>
+
+<div class="card">
+<h3>Security Monitoring</h3>
+<p>
+Collected and analyzed security telemetry from Azure resources through Log Analytics and Data Connectors.
+</p>
+</div>
+
+<div class="card">
+<h3>Incident Investigation</h3>
+<p>
+Investigated correlated security incidents using alerts, entities, timelines, and investigation graphs.
+</p>
+</div>
+
+<div class="card">
+<h3>Kusto Query Language (KQL)</h3>
+<p>
+Performed advanced log analysis, security investigations, and data exploration using KQL.
+</p>
+</div>
+
+<div class="card">
+<h3>Threat Hunting</h3>
+<p>
+Conducted proactive hunting using MITRE ATT&CK-aligned queries to identify suspicious activity.
+</p>
+</div>
+
+<div class="card">
+<h3>SOAR Automation</h3>
+<p>
+Configured Automation Rules and Logic App Playbooks to improve response speed and operational consistency.
+</p>
+</div>
+
+</div>
+
+</section>
+
+<hr>
+
+<section>
+
+<h2>Lessons Learned</h2>
+
+<p>
+
+This project demonstrated that effective security operations depend on
+centralized visibility, timely detection, and structured incident response.
+Microsoft Sentinel integrates log collection, security analytics, incident
+management, and automation into a single cloud-native platform, enabling
+organizations to improve operational efficiency while strengthening their
+overall security posture.
+
+</p>
+
+<p>
+
+The project reinforced the importance of high-quality security telemetry.
+Without comprehensive log collection, security teams cannot effectively detect,
+investigate, or respond to threats. Configuring Data Connectors and Log
+Analytics Workspace established the foundation required for meaningful
+analytics and threat detection.
+
+</p>
+
+<p>
+
+The implementation also highlighted the value of combining automation with
+human expertise. Automation Rules and Logic App Playbooks reduce repetitive
+tasks and accelerate incident response, while Kusto Query Language and threat
+hunting empower analysts to investigate sophisticated attacks that may bypass
+automated detections. Together, these capabilities enable a mature and
+proactive Security Operations Center (SOC).
+
+</p>
+
+</section>
+
+<hr>
+
+<section>
+
+<h2>References</h2>
+
+<ul>
+
+<li>Microsoft Learn – Microsoft Sentinel documentation</li>
+
+<li>Microsoft Learn – Log Analytics Workspace documentation</li>
+
+<li>Microsoft Learn – Microsoft Sentinel Data Connectors</li>
+
+<li>Microsoft Learn – Kusto Query Language (KQL)</li>
+
+<li>Microsoft Learn – Threat Hunting in Microsoft Sentinel</li>
+
+<li>Microsoft Learn – Automation Rules and Playbooks</li>
+
+<li>Microsoft Learn – Azure Monitor documentation</li>
+
+</ul>
+
+</section>
+
+<hr>
+
+<section>
+
+<h2>Related Projects</h2>
+
+<ul>
+
+<li><a href="defender-for-cloud.html">Microsoft Defender for Cloud</a></li>
+
+<li><a href="azure-firewall.html">Azure Firewall Deployment and Traffic Control</a></li>
+
+<li><a href="network-segmentation.html">Azure Network Segmentation Using NSGs and ASGs</a></li>
+
+<li><a href="storage-security.html">Azure Storage Security with Service Endpoints and Network Security Groups</a></li>
+
+<li><a href="rbac-security.html">Azure Role-Based Access Control (RBAC)</a></li>
+
+</ul>
+
+</section>
+
+<hr>
+
+<section>
+
+<h2>Project Summary</h2>
+
+<p>
+
+This project demonstrated the deployment and configuration of Microsoft
+Sentinel as a cloud-native Security Information and Event Management (SIEM)
+and Security Orchestration, Automation, and Response (SOAR) platform within
+Microsoft Azure. Beginning with the creation of a Log Analytics Workspace,
+the implementation progressed through data connector configuration, incident
+investigation, Kusto Query Language (KQL) analysis, proactive threat hunting,
+and automated incident response using Automation Rules and Logic App
+Playbooks.
+
+</p>
+
+<p>
+
+The completed solution established a centralized Security Operations Center
+capable of collecting telemetry, correlating security events, detecting
+threats, supporting detailed investigations, and automating repetitive
+security workflows. The project strengthened practical experience with cloud
+security monitoring, security analytics, detection engineering, incident
+response, threat hunting, and Microsoft security technologies while
+demonstrating enterprise best practices for modern cloud security operations.
+
+</p>
+
+</section>
+
+</div>
+
+</body>
+</html>
