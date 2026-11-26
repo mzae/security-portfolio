@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Silent Webhook | n8n Repair Lab</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .lab-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-bottom: 2rem;
+        }
+        .badge {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            padding: 0.3rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+        }
+        .badge.accent { color: var(--accent); border-color: var(--accent); }
+        .section-block {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+        .section-block h2 {
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+            color: var(--text);
+        }
+        .section-block p, .section-block li {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+        .section-block ul { padding-left: 1.25rem; }
+        .section-block li { margin-bottom: 0.4rem; }
+        pre {
+            background: #0a0e14;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-top: 0.75rem;
+        }
+        code.inline {
+            background: rgba(88, 166, 255, 0.12);
+            color: var(--accent);
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+        }
+        th, td {
+            text-align: left;
+            padding: 0.6rem 0.75rem;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+        th { color: var(--text); font-weight: 600; }
+        td { color: var(--muted); }
+        .tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .tag.trigger { background: rgba(240, 82, 82, 0.15); color: #f85149; }
+        .tag.config { background: rgba(210, 153, 34, 0.15); color: #d29922; }
+        .tag.state  { background: rgba(63, 185, 80, 0.15); color: #3fb950; }
+        .verdict {
+            border-left: 3px solid var(--accent);
+            padding: 1rem 1.25rem;
+            background: rgba(88, 166, 255, 0.06);
+            border-radius: 0 8px 8px 0;
+            margin-top: 1.5rem;
+        }
+        .verdict p { color: var(--text) !important; font-size: 1rem; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="../index.html">Home</a>
+    <a href="../cloud/index.html">Cloud Security</a>
+    <a href="../soc/index.html">SOC Analyst</a>
+    <a href="../aiml/index.html">AI/ML Security</a>
+    <a href="../automation/index.html" class="active">AI Automation</a>
+    <a href="../projects/index.html">Projects</a>
+    <a href="../resume/index.html">Resume</a>
+</nav>
+
+<div class="container">
+
+    <h1>The Silent Webhook</h1>
+    <p class="lead">
+        A contact form that "works" but sends nothing. Four hidden bugs across trigger configuration,
+        workflow state, and URL handling — found and fixed with a repeatable debugging protocol.
+    </p>
+
+    <div class="lab-meta">
+        <span class="badge accent">n8n</span>
+        <span class="badge">Webhooks</span>
+        <span class="badge">Debugging</span>
+        <span class="badge">Gmail Integration</span>
+        <span class="badge">Kali Linux (self-hosted)</span>
+        <span class="badge">Day 1 · Beginner</span>
+    </div>
+
+    <!-- Business Context -->
+    <div class="section-block">
+        <h2>🏢 The Client Problem</h2>
+        <p><strong>Bright Minds Tutoring (Nairobi)</strong> has a website contact form. The developer reports the form submits fine — but no email ever reaches the owner.</p>
+        <ul style="margin-top: 0.75rem;">
+            <li>Nothing appears in n8n when the form is submitted.</li>
+            <li>A <code class="inline">curl</code> test returns an error JSON instead of success.</li>
+            <li>The developer says: <em>"It worked once while I had the editor open, then never again."</em></li>
+        </ul>
+        <p style="margin-top: 0.75rem;"><strong>Architecture:</strong> <code class="inline">Webhook → Edit Fields → Gmail</code></p>
+    </div>
+
+    <!-- Debugging Protocol -->
+    <div class="section-block">
+        <h2>🔍 My Debugging Protocol</h2>
+        <p>I applied a seven-step method to every failure — reproduce, read the error, locate the first wrong node, inspect input vs output, hypothesize by layer, fix and verify, document and prevent.</p>
+        <p style="margin-top: 0.75rem;"><strong>Golden rule:</strong> Find the first wrong node, not the first red node. The error message tells you where the symptom surfaced, not where the cause lives.</p>
+    </div>
+
+    <!-- Bugs Found -->
+    <div class="section-block">
+        <h2>🐛 The Four Hidden Bugs</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Symptom</th>
+                    <th>Root Cause</th>
+                    <th>Layer</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Form "worked once," then died</td>
+                    <td>Website used the <strong>Test URL</strong> (<code class="inline">/webhook-test/</code>) — works for one call only, while the editor listens</td>
+                    <td><span class="tag config">Config</span></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>404: webhook not registered</td>
+                    <td>Path typo: site called <code class="inline">contact-from</code>, webhook was <code class="inline">contact-form</code></td>
+                    <td><span class="tag trigger">Trigger</span></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Production URL returned 404</td>
+                    <td>Workflow saved but <strong>never activated</strong> — production triggers only fire when active/published</td>
+                    <td><span class="tag state">State</span></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>404: not registered for POST</td>
+                    <td>Webhook defaulted to <code class="inline">GET</code>; the form sends <code class="inline">POST</code></td>
+                    <td><span class="tag trigger">Trigger</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Evidence -->
+    <div class="section-block">
+        <h2>🧪 Reproduction &amp; Verification</h2>
+        <p>Each fix was verified with the same failing input before moving to the next:</p>
+        <pre>curl -i -X POST "http://localhost:5678/webhook/contact-form" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Amina Otieno","email":"amina@example.co.ke","message":"Evening classes?"}'</pre>
+        <p style="margin-top: 0.75rem;"><strong>Before fixes:</strong> <code class="inline">{"code":404,"message":"The requested webhook \"POST contact-from\" is not registered."}</code></p>
+        <p><strong>After all fixes:</strong> <code class="inline">200 OK → {"message":"Workflow was started"}</code> ✅</p>
+        <p style="margin-top: 0.75rem;">Execution confirmed in the <strong>Executions tab</strong> (production runs never appear on the canvas), and the Gmail node delivered the email end-to-end.</p>
+    </div>
+
+    <!-- Bonus findings -->
+    <div class="section-block">
+        <h2>💡 Bonus Findings During Investigation</h2>
+        <ul>
+            <li><strong>Green ≠ correct:</strong> A mis-mapped expression resolves to <code class="inline">null</code> without throwing — the execution stays green while the email says "Name: undefined." Missing values are not errors, so validation must be explicit.</li>
+            <li><strong>Item multiplication:</strong> A leftover parallel branch caused <em>No Operation</em> to run twice per call — in production, that means duplicate emails.</li>
+            <li><strong>Credentials layer:</strong> Gmail threw "Node does not have any credentials set" — a credential problem, not a data problem, yet the sender still saw HTTP 200.</li>
+            <li><strong>Timezone drift:</strong> Executions logged in UTC, three hours behind Nairobi — flagged for Day 2 timezone work.</li>
+        </ul>
+    </div>
+
+    <!-- Key takeaways -->
+    <div class="section-block">
+        <h2>📚 Concepts Proven by Experiment</h2>
+        <ul>
+            <li><strong>Webhook = mailbox labelled method + path + state.</strong> Registration depends on all three matching.</li>
+            <li><strong>Test vs Production URLs:</strong> Test works one call at a time while listening; Production works continuously while published.</li>
+            <li><strong>HTTP 200 means accepted, not successful.</strong> The caller sees the immediate reply, not what the nodes did afterward.</li>
+            <li><strong>Webhook item shape:</strong> posted JSON lives under <code class="inline">$json.body</code>; query params under <code class="inline">$json.query</code>. Browser address bars always send GET.</li>
+            <li><strong>A 404 means no execution happened</strong> — there's nothing in Executions to inspect, so diagnose from the response text itself.</li>
+        </ul>
+    </div>
+
+    <!-- Prevention -->
+    <div class="section-block">
+        <h2>🛡️ Prevention Checklist (What I'd Hand the Client)</h2>
+        <ul>
+            <li>Release checklist: active ✓ method ✓ path ✓ production URL ✓ one real end-to-end test ✓</li>
+            <li>Copy paths/URLs from the node — never type them by hand.</li>
+            <li>Add validation (IF/Filter on required fields) plus an error workflow, so wrong-but-green runs get caught.</li>
+            <li>[Self-hosted] Behind a reverse proxy, set <code class="inline">WEBHOOK_URL</code> correctly — tunnels are for development only.</li>
+            <li>Document the final production URL for the client, and ask to be notified before credential/key rotations.</li>
+        </ul>
+    </div>
+
+    <div class="verdict">
+        <p><strong>Outcome:</strong> All four defects identified through systematic reproduction and layered hypothesis testing, fixed incrementally with evidence at each step, and verified with a live end-to-end POST. The owner now receives every enquiry.</p>
+    </div>
+
+    <div style="margin-top: 2.5rem;">
+        <a href="../automation/index.html" class="btn">← Back to AI Automation</a>
+    </div>
+
+</div>
+
+<footer>
+    <p>Daniel Wanjama | AI Automation Portfolio</p>
+</footer>
+
+</body>
+</html>
