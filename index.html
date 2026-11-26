@@ -1,77 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Daniel Wanjama Portfolio</title>
-<link rel="stylesheet" href="/assets/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daniel Wanjama Portfolio</title>
+    <!-- Root page uses ./ NOT ../ -->
+    <link rel="stylesheet" href="./assets/css/style.css">
 </head>
-
 <body>
 
-<header>
-    <h1>Daniel Wanjama Portfolio</h1>
-    <p>
-        Cloud Security | SOC Analyst | AI/ML Security |
-        AI Automation Engineering
-    </p>
-</header>
-
 <nav>
-<a href="/index.html">Home</a>
-<a href="/cloud/index.html">Cloud Security</a>
-<a href="/soc/index.html">SOC Analyst</a>
-<a href="/aiml/index.html">AI/ML Security</a>
-<a href="/projects/index.html">Projects</a>
-<a href="/resume/index.html">Resume</a>
+    <a href="./index.html" class="active">Home</a>
+    <a href="./cloud/index.html">Cloud Security</a>
+    <a href="./soc/index.html">SOC Analyst</a>
+    <a href="./aiml/index.html">AI/ML Security</a>
+    <a href="./automation/index.html">AI Automation</a>
+    <a href="./projects/index.html">Projects</a>
+    <a href="./resume/index.html">Resume</a>
 </nav>
 
 <div class="container">
 
-</section>
+    <h1>Daniel Wanjama Portfolio</h1>
 
-<section>
-
-<div class="card-grid">
+    <p class="lead">
+        Cloud Security | SOC Analyst | AI/ML Security | AI Automation Engineering
+    </p>
 
     <div class="card-grid">
 
-    <div class="card">
-        <h3>Cloud Security</h3>
-        <p>Azure Security, Sentinel, RBAC, Firewall, Defender for Cloud.</p>
-        <a href="cloud/index.html">View Track</a>
+        <div class="card">
+            <h3>Cloud Security</h3>
+            <p>Azure Security, Sentinel, RBAC, Firewall, Defender for Cloud.</p>
+            <a href="./cloud/index.html">View Track →</a>
+        </div>
+
+        <div class="card">
+            <h3>SOC Analyst</h3>
+            <p>Threat Hunting, Incident Response, Malware Analysis.</p>
+            <a href="./soc/index.html">View Track →</a>
+        </div>
+
+        <div class="card">
+            <h3>AI/ML Security</h3>
+            <p>Prompt Injection, RAG Security, LLM Security, AI Forensics.</p>
+            <a href="./aiml/index.html">View Track →</a>
+        </div>
+
+        <div class="card">
+            <h3>AI Automation</h3>
+            <p>n8n, AI Agents, API Integrations, Workflow Troubleshooting.</p>
+            <a href="./automation/index.html">View Track →</a>
+        </div>
+
     </div>
-
-    <div class="card">
-        <h3>SOC Analyst</h3>
-        <p>Threat Hunting, Incident Response, Malware Analysis.</p>
-        <a href="soc/index.html">View Track</a>
-    </div>
-
-    <div class="card">
-        <h3>AI/ML Security</h3>
-        <p>Prompt Injection, RAG Security, LLM Security, AI Forensics.</p>
-        <a href="aiml/index.html">View Track</a>
-    </div>
-
-    <div class="card">
-        <h3>AI Automation</h3>
-        <p>n8n, AI Agents, API Integrations, Workflow Troubleshooting.</p>
-        <a href="automation/index.html">View Track</a>
-    </div>
-
-</div>
-
-
-</div>
-
-</section>
 
 </div>
 
 <footer>
-Daniel Wanjama | AI Automation Portfolio
+    <p>Daniel Wanjama | AI Automation Portfolio</p>
 </footer>
 
 </body>
